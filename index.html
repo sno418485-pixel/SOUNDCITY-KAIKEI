@@ -339,9 +339,9 @@ textarea.form-input{resize:none;height:100px;}
 <!-- ═══ Loading ═══ -->
 <div id="loading-overlay">
   <div style="margin-bottom:20px;text-align:center;">
-    <svg width="80" height="80" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+    <svg width="100" height="100" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
       <rect width="512" height="512" rx="100" fill="#1f1f1f"/>
-      <text x="256" y="340" font-family="Arial,sans-serif" font-size="280" font-weight="300" fill="#ffffff" text-anchor="middle">S</text>
+      <text x="256" y="310" font-family="'Helvetica Neue', Arial, sans-serif" font-size="140" font-weight="600" fill="#ffffff" text-anchor="middle">S会計</text>
     </svg>
   </div>
   <div style="font-size:20px;font-weight:700;color:var(--accent);margin-bottom:6px;letter-spacing:3px;">SoundCity会計</div>
@@ -437,18 +437,18 @@ textarea.form-input{resize:none;height:100px;}
       </div>
       <div style="display:grid;gap:12px;">
         <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:12px;">
-          <span style="font-size:12px;color:var(--text3);">銀行</span><span style="font-size:14px;font-weight:600;">りそな銀行</span>
+          <span style="font-size:12px;color:var(--text3);">銀行</span><span style="font-size:14px;font-weight:600;">三井住友銀行</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:12px;">
-          <span style="font-size:12px;color:var(--text3);">支店</span><span style="font-size:14px;font-weight:600;">本郷支店</span>
+          <span style="font-size:12px;color:var(--text3);">支店</span><span style="font-size:14px;font-weight:600;">白山支店(228)</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:12px;">
           <span style="font-size:12px;color:var(--text3);">口座名義</span>
-          <span style="font-size:13px;font-weight:600;text-align:right;line-height:1.5;">サウンドシティ</span>
+          <span style="font-size:13px;font-weight:600;text-align:right;line-height:1.5;">東洋大学サウンドシティ</span>
         </div>
         <div style="display:flex;justify-content:space-between;align-items:center;padding-top:4px;">
           <span style="font-size:12px;color:var(--text3);">普通</span>
-          <span style="font-size:22px;font-weight:300;color:var(--accent);background:var(--bg4);border:1px solid var(--border);border-radius:6px;padding:6px 16px;letter-spacing:4px;font-family:Arial,sans-serif;">1886166</span>
+          <span style="font-size:22px;font-weight:800;color:#1a1a1a;background:#FFF9C4;border-radius:6px;padding:6px 16px;letter-spacing:4px;font-family:Arial,sans-serif;">6819801</span>
         </div>
       </div>
     </div>
@@ -582,7 +582,7 @@ textarea.form-input{resize:none;height:100px;}
     </div>
     <div style="background:var(--accent);border-radius:16px;padding:40px 24px;text-align:center;margin-top:20px;">
       <div style="font-size:12px;color:#666;margin-bottom:16px;font-weight:700;letter-spacing:1px;">領収書の宛名</div>
-      <div style="font-size:32px;font-weight:800;color:#000;line-height:1.4;letter-spacing:2px;">SoundCity</div>
+      <div style="font-size:32px;font-weight:800;color:#000;line-height:1.4;letter-spacing:2px;">東洋大学<br>サウンドシティ</div>
     </div>
     <button class="blue-btn" style="margin-top:32px;" onclick="go('repair')">閉じる</button>
   </div>
@@ -823,7 +823,8 @@ const CHANNEL_ACCESS_TOKEN = 'iHStab/dteEQp8R0ZYfMWWQiymLRAxpGvhA/cUm9WEzodTctcy
 // HTTP HELPERS
 // ══════════════════════════════════════════════════════
 function getHeaders(token) {
-  const bearer = token || SUPABASE_KEY;
+  // ダミートークンの場合は、Supabaseの一時アクセス用にanon keyを代替使用
+  const bearer = (token && token !== 'dummy_admin_token') ? token : SUPABASE_KEY;
   return {
     'Content-Type': 'application/json',
     'apikey': SUPABASE_KEY,
@@ -919,6 +920,16 @@ async function doLogin() {
   const email = document.getElementById('login-email').value.trim();
   const pass = document.getElementById('login-pass').value;
   if (!email||!pass) { showToast('メールとパスワードを入力してください',true); return; }
+
+  // ★ ご要望のハードコードされた直接ログイン処理（バイパス）
+  if (email === 'alligator.pear4046@gmail.com' && pass === 'sound4447') {
+    await onLoginSuccess({
+      access_token: 'dummy_admin_token',
+      user: { id: 'admin_dummy_id', email: email }
+    });
+    return;
+  }
+
   const btn = document.querySelector('#auth-login-panel .submit-btn');
   btn.textContent = 'ログイン中...'; btn.disabled = true;
   try {
@@ -939,29 +950,40 @@ async function doLogin() {
 async function onLoginSuccess(data) {
   accessToken = data.access_token;
   currentUser = data.user;
-  if (accessToken) localStorage.setItem('sb_token', accessToken);
+  
+  // ダミートークン以外はローカルストレージへ保存
+  if (accessToken !== 'dummy_admin_token') {
+    localStorage.setItem('sb_token', accessToken);
+  }
   closeAdminLogin();
 
-  try {
-    const profiles = await dbGet('profiles', `id=eq.${currentUser.id}`, accessToken);
-    currentProfile = profiles[0] || { role: 'admin', name: currentUser.email };
-  } catch(e) {
-    currentProfile = { role: 'admin', name: currentUser.email };
+  if (accessToken === 'dummy_admin_token') {
+    // バイパスログイン時は強制的に管理者プロフィールをセット
+    currentProfile = { role: 'admin', name: '管理者' };
+  } else {
+    try {
+      const profiles = await dbGet('profiles', `id=eq.${currentUser.id}`, accessToken);
+      currentProfile = profiles[0] || { role: 'admin', name: currentUser.email };
+    } catch(e) {
+      currentProfile = { role: 'admin', name: currentUser.email };
+    }
   }
 
-  // アドレスのハードコードでの役割設定（必要に応じて変更）
-  if (currentUser.email === 'soundcity.admin@gmail.com') currentProfile.role = 'admin';
+  // 指定アドレスの場合は管理者権限を付与
+  if (currentUser.email === 'alligator.pear4046@gmail.com') currentProfile.role = 'admin';
 
   showLoading('管理者モードに切り替え中...');
   await init();
 }
 
 async function doLogout() {
-  try {
-    await fetch(`${SUPABASE_URL}/auth/v1/logout`, {
-      method:'POST', headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}
-    });
-  } catch(e) {}
+  if (accessToken !== 'dummy_admin_token') {
+    try {
+      await fetch(`${SUPABASE_URL}/auth/v1/logout`, {
+        method:'POST', headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+accessToken}
+      });
+    } catch(e) {}
+  }
   localStorage.removeItem('sb_token');
   currentUser = null; currentProfile = null; accessToken = null;
   showLoading('ゲストモードに戻ります...');
