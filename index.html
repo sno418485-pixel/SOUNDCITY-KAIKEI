@@ -34,13 +34,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>SoundCity 会計</title>
+<title>SoundCity会計</title>
 <!-- PWA設定 -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="SoundCity会計">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#0a0a0a">
+<meta name="theme-color" content="#121212">
 <!-- アイコン（iOS/Android） -->
 <link rel="apple-touch-icon" id="pwa-icon" href="https://raw.githubusercontent.com/YOUR_USERNAME/soundcity-kaikei/main/icon.png">
 <link rel="icon" id="pwa-favicon" href="https://raw.githubusercontent.com/YOUR_USERNAME/soundcity-kaikei/main/icon.png">
@@ -48,13 +48,13 @@
 <script>
 const GITHUB_ICON_URL = "https://raw.githubusercontent.com/YOUR_USERNAME/soundcity-kaikei/main/icon.png";
 const manifestData = {
-  name: "SoundCity 会計",
-  short_name: "SoundCity会計",
+  name: "SoundCity会計",
+  short_name: "SoundCity",
   description: "SoundCity 会計管理",
   start_url: "./",
   display: "standalone",
-  background_color: "#0a0a0a",
-  theme_color: "#0a0a0a",
+  background_color: "#121212",
+  theme_color: "#121212",
   orientation: "portrait",
   icons: [
     { src: GITHUB_ICON_URL, sizes: "512x512", type: "image/png", purpose: "any maskable" }
@@ -70,19 +70,28 @@ document.getElementById('pwa-icon').href = GITHUB_ICON_URL;
 document.getElementById('pwa-favicon').href = GITHUB_ICON_URL;
 </script>
 <style>
+/* ── モノトーン・シックなデザイン設定 ── */
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
 :root{
-  /* モノトーン・シックなカラーパレット */
-  --bg:#0a0a0a;--bg2:#121212;--bg3:#1a1a1a;--bg4:#2a2a2a;
-  --accent:#ffffff;--accent2:#555555;
-  --green:#5a735e;--green2:#485e4b; /* 落ち着いたグリーン */
-  --purple:#333333; /* 紫の代わりにダークグレー */
-  --red:#7a4b4b;--amber:#7a6c4b; /* 落ち着いたレッド・アンバー */
-  --text:#ffffff;--text2:#b3b3b3;--text3:#737373;
-  --border:#333333;--radius:16px;--radius-sm:10px;
+  --bg:#0a0a0a;       /* 黒背景 */
+  --bg2:#141414;      /* やや明るい黒 */
+  --bg3:#1f1f1f;      /* カード背景など */
+  --bg4:#2e2e2e;      /* 浮き出た要素 */
+  --accent:#ffffff;   /* 白（メインアクセント） */
+  --accent2:#aaaaaa;  /* グレー（サブアクセント） */
+  --green:#cccccc;    /* 成功系（明るいグレー） */
+  --red:#444444;      /* 失敗/警告系（暗めのグレー） */
+  --amber:#888888;    /* 中間（中間グレー） */
+  --purple:#333333;   /* その他ボタン */
+  --text:#ffffff;     /* 基本テキスト（白） */
+  --text2:#b0b0b0;    /* サブテキスト（グレー） */
+  --text3:#777777;    /* 微小テキスト（暗いグレー） */
+  --border:#333333;   /* 境界線 */
+  --radius:12px;      /* 少しシャープな角丸 */
+  --radius-sm:8px;
 }
 html,body{height:100%;background:var(--bg);color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,'Hiragino Sans','Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;
+  font-family:'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
   font-size:16px;overflow:hidden;}
 
 /* ── App wrapper ── */
@@ -90,12 +99,8 @@ html,body{height:100%;background:var(--bg);color:var(--text);
 
 /* ── Screens ── */
 .screen{
-  position:absolute;inset:0;
-  overflow-y:auto;
-  padding:0 16px 40px;
-  background:var(--bg);
-  display:none;
-  -webkit-overflow-scrolling:touch;
+  position:absolute;inset:0;overflow-y:auto;padding:0 16px 40px;
+  background:var(--bg);display:none;-webkit-overflow-scrolling:touch;
 }
 .screen.active{display:block;}
 .screen::-webkit-scrollbar{display:none;}
@@ -109,28 +114,24 @@ html,body{height:100%;background:var(--bg);color:var(--text);
 .loading-spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--accent);
   border-radius:50%;animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg);}}
-.loading-text{color:var(--text2);font-size:14px;}
+.loading-text{color:var(--text2);font-size:14px;letter-spacing:1px;}
 
 /* ── Auth form ── */
-.auth-card{background:var(--bg3);border-radius:var(--radius);padding:28px 24px;width:90%;max-width:360px;}
-.auth-title{font-size:22px;font-weight:800;text-align:center;margin-bottom:6px;}
+.auth-card{background:var(--bg3);border-radius:var(--radius);padding:28px 24px;width:90%;max-width:360px;border:1px solid var(--border);}
+.auth-title{font-size:22px;font-weight:700;text-align:center;margin-bottom:6px;letter-spacing:2px;}
 .auth-sub{font-size:13px;color:var(--text2);text-align:center;margin-bottom:24px;}
-.auth-tab-bar{display:flex;background:var(--bg4);border-radius:10px;padding:3px;gap:3px;margin-bottom:20px;}
-.auth-tab{flex:1;padding:8px;border:none;border-radius:8px;background:transparent;color:var(--text2);
-  font-size:13px;font-weight:600;cursor:pointer;}
-.auth-tab.active{background:var(--accent2);color:#fff;}
 
 /* ── Header ── */
 .page-header{padding:20px 0 8px;position:sticky;top:0;background:var(--bg);z-index:10;}
-.back-btn{color:var(--accent);font-size:15px;cursor:pointer;display:inline-flex;align-items:center;
-  gap:4px;padding:4px 0;background:none;border:none;}
-.page-title{font-size:20px;font-weight:700;color:var(--accent);text-align:center;margin:8px 0 16px;}
+.back-btn{color:var(--accent);font-size:14px;cursor:pointer;display:inline-flex;align-items:center;
+  gap:4px;padding:4px 0;background:none;border:none;letter-spacing:1px;}
+.page-title{font-size:18px;font-weight:700;color:var(--accent);text-align:center;margin:8px 0 16px;letter-spacing:2px;}
 
 /* ── User bar ── */
 .user-bar{display:flex;align-items:center;justify-content:space-between;
-  background:var(--bg3);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:16px;}
+  background:var(--bg3);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:16px;border:1px solid var(--border);}
 .user-bar-name{font-size:13px;color:var(--text2);}
-.user-bar-role{font-size:11px;padding:2px 10px;border-radius:99px;font-weight:700;}
+.user-bar-role{font-size:11px;padding:2px 10px;border-radius:99px;font-weight:700;letter-spacing:1px;}
 .role-admin{background:var(--accent);color:#000;}
 .role-member{background:var(--bg4);color:var(--text2);}
 .logout-btn{font-size:12px;color:var(--text3);background:none;border:none;cursor:pointer;}
@@ -138,206 +139,199 @@ html,body{height:100%;background:var(--bg);color:var(--text);
 /* ── Home ── */
 #screen-home{padding-top:0;}
 .home-hero{text-align:center;padding:36px 0 28px;}
-.home-hero h1{font-size:38px;font-weight:800;letter-spacing:-1px;}
-.home-hero h1 span{color:var(--accent);font-weight:300;}
-.home-hero .underline{width:60px;height:2px;background:var(--accent);margin:12px auto 0;border-radius:2px;}
+.home-hero h1{font-size:38px;font-weight:800;letter-spacing:2px;}
+.home-hero h1 span{font-weight:300;}
+.home-hero .underline{width:60px;height:2px;background:var(--accent);margin:12px auto 0;}
 .menu-btn{display:flex;align-items:center;justify-content:center;gap:12px;width:100%;padding:20px;
-  background:var(--bg3);border:none;border-radius:var(--radius);color:var(--text);font-size:18px;
-  font-weight:600;cursor:pointer;margin-bottom:12px;transition:background .15s,transform .1s;}
+  background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:16px;
+  font-weight:600;cursor:pointer;margin-bottom:12px;transition:background .15s,transform .1s;letter-spacing:1px;}
 .menu-btn:active{background:var(--bg4);transform:scale(0.98);}
-.menu-btn .icon{font-size:22px;}
+.menu-btn .icon{font-size:20px;}
 
 /* ── Dashboard btn (admin only) ── */
 .dashboard-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;padding:16px;
   background:var(--accent);border:none;border-radius:var(--radius);
-  color:#000;font-size:16px;font-weight:700;cursor:pointer;margin-bottom:12px;}
+  color:#000;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:12px;letter-spacing:1px;}
 
 /* ── Cards ── */
-.card{background:var(--bg3);border-radius:var(--radius);padding:18px;margin-bottom:12px;}
+.card{background:var(--bg3);border-radius:var(--radius);padding:18px;margin-bottom:12px;border:1px solid var(--border);}
 
 /* ── Progress ── */
 .progress-big{text-align:center;}
-.progress-num{font-size:52px;font-weight:800;line-height:1;}
-.progress-num span{font-size:28px;font-weight:400;color:var(--text2);}
-.progress-sub{color:var(--text2);font-size:14px;margin:6px 0 14px;}
-.progress-bar-wrap{background:var(--bg4);border-radius:99px;height:12px;margin-bottom:6px;}
-.progress-bar{background:var(--accent);height:12px;border-radius:99px;transition:width .4s;}
-.progress-pct{text-align:center;color:var(--accent);font-size:13px;}
+.progress-num{font-size:48px;font-weight:300;line-height:1;font-family:Arial, sans-serif;}
+.progress-num span{font-size:24px;color:var(--text3);}
+.progress-sub{color:var(--text2);font-size:13px;margin:6px 0 14px;letter-spacing:1px;}
+.progress-bar-wrap{background:var(--bg4);border-radius:99px;height:8px;margin-bottom:6px;}
+.progress-bar{background:var(--accent);height:8px;border-radius:99px;transition:width .4s;}
+.progress-pct{text-align:center;color:var(--accent);font-size:12px;letter-spacing:1px;}
 
 /* ── Member row ── */
 .member-row{display:flex;align-items:center;justify-content:space-between;
-  background:var(--bg3);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:8px;}
+  background:var(--bg3);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:8px;border:1px solid var(--border);}
 .member-name{font-size:16px;font-weight:600;}
-.member-part{font-size:13px;color:var(--text2);margin-top:2px;}
+.member-part{font-size:12px;color:var(--text2);margin-top:4px;}
 
 /* ── Toggle ── */
-.toggle{width:52px;height:30px;border-radius:99px;background:var(--bg4);position:relative;
-  cursor:pointer;transition:background .2s;flex-shrink:0;border:none;}
+.toggle{width:50px;height:28px;border-radius:99px;background:var(--bg4);position:relative;
+  cursor:pointer;transition:background .2s;flex-shrink:0;border:1px solid var(--border);}
 .toggle.on{background:var(--accent);}
-.toggle::after{content:'';position:absolute;top:3px;left:3px;width:24px;height:24px;
-  border-radius:50%;background:#000;transition:left .2s;}
-.toggle.on::after{left:25px;}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:22px;height:22px;
+  border-radius:50%;background:var(--text2);transition:left .2s, background .2s;}
+.toggle.on::after{left:24px;background:#000;}
 .toggle:disabled{opacity:.4;cursor:not-allowed;}
 
 /* ── Tabs ── */
-.tab-bar{display:flex;background:var(--bg3);border-radius:var(--radius);padding:4px;gap:4px;margin-bottom:16px;}
-.tab-btn{flex:1;padding:9px 2px;border:none;border-radius:12px;background:transparent;
-  color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;transition:background .15s,color .15s;}
-.tab-btn.active{background:var(--accent2);color:#fff;}
+.tab-bar{display:flex;background:var(--bg3);border-radius:var(--radius);padding:4px;gap:4px;margin-bottom:16px;border:1px solid var(--border);}
+.tab-btn{flex:1;padding:10px 2px;border:none;border-radius:8px;background:transparent;
+  color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;transition:background .15s,color .15s;letter-spacing:1px;}
+.tab-btn.active{background:var(--bg4);color:var(--accent);}
 .tab-panel{display:none;}
 .tab-panel.active{display:block;}
 
 /* ── Month nav ── */
 .month-select-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
 .month-nav{background:none;border:none;color:var(--accent);font-size:22px;cursor:pointer;padding:4px 12px;}
-.month-label{font-size:17px;font-weight:700;}
+.month-label{font-size:16px;font-weight:700;letter-spacing:2px;}
 
 /* ── Buttons ── */
-.save-month-btn{width:100%;padding:16px;background:var(--accent2);border:none;
-  border-radius:var(--radius);color:#fff;font-size:16px;font-weight:700;cursor:pointer;margin-top:12px;}
-.green-btn{width:100%;padding:18px;background:var(--accent);border:none;border-radius:var(--radius);
-  color:#000;font-size:17px;font-weight:700;cursor:pointer;margin-bottom:12px;}
-.green-btn:active{background:#e0e0e0;}
-.blue-btn{width:100%;padding:18px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);
-  color:var(--text);font-size:17px;font-weight:600;cursor:pointer;margin-bottom:12px;}
-.blue-btn:active{background:var(--bg4);}
-.purple-btn{width:100%;padding:18px;background:var(--bg4);border:none;border-radius:var(--radius);
-  color:#fff;font-size:17px;font-weight:700;cursor:pointer;margin-bottom:12px;}
+.save-month-btn{width:100%;padding:16px;background:var(--bg4);border:1px solid var(--border);
+  border-radius:var(--radius);color:var(--accent);font-size:14px;font-weight:600;cursor:pointer;margin-top:12px;letter-spacing:1px;}
+.green-btn{width:100%;padding:16px;background:var(--accent);border:none;border-radius:var(--radius);
+  color:#000;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:12px;letter-spacing:1px;}
+.blue-btn{width:100%;padding:16px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);
+  color:var(--text);font-size:15px;font-weight:600;cursor:pointer;margin-bottom:12px;letter-spacing:1px;}
+.purple-btn{width:100%;padding:16px;background:var(--bg2);border:1px dashed var(--border);border-radius:var(--radius);
+  color:var(--accent);font-size:15px;font-weight:600;cursor:pointer;margin-bottom:12px;letter-spacing:1px;}
 .submit-btn{width:100%;padding:16px;background:var(--accent);border:none;border-radius:var(--radius);
-  color:#000;font-size:16px;font-weight:700;cursor:pointer;margin-top:4px;}
+  color:#000;font-size:15px;font-weight:700;cursor:pointer;margin-top:4px;letter-spacing:2px;}
 .submit-btn:active{opacity:.85;}
 .upload-mini{background:none;border:1px solid var(--border);border-radius:6px;
-  color:var(--text2);font-size:12px;padding:5px 10px;cursor:pointer;}
+  color:var(--text2);font-size:11px;padding:6px 12px;cursor:pointer;letter-spacing:1px;}
 
 /* ── Forms ── */
-.form-label{font-size:13px;color:var(--text2);margin-bottom:6px;display:block;}
-.form-input{width:100%;background:var(--bg4);border:1.5px solid var(--border);
-  border-radius:var(--radius-sm);color:var(--text);font-size:16px;padding:14px;
-  outline:none;margin-bottom:14px;}
-.form-input:focus{border-color:var(--accent);}
+.form-label{font-size:12px;color:var(--text2);margin-bottom:6px;display:block;letter-spacing:1px;}
+.form-input{width:100%;background:var(--bg4);border:1px solid var(--border);
+  border-radius:var(--radius-sm);color:var(--text);font-size:15px;padding:14px;
+  outline:none;margin-bottom:16px;}
+.form-input:focus{border-color:var(--accent2);}
 .form-input::placeholder{color:var(--text3);}
-textarea.form-input{resize:none;height:90px;}
-select.form-input{-webkit-appearance:none;appearance:none;}
+textarea.form-input{resize:none;height:100px;}
 
 /* ── Upload box ── */
-.upload-box{border:2px dashed var(--accent2);border-radius:var(--radius-sm);padding:28px 16px;
-  text-align:center;cursor:pointer;position:relative;margin-bottom:14px;}
+.upload-box{border:1px dashed var(--accent2);border-radius:var(--radius-sm);padding:28px 16px;
+  text-align:center;cursor:pointer;position:relative;margin-bottom:16px;background:var(--bg2);}
 .upload-box input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-.upload-box .upload-icon{font-size:28px;margin-bottom:6px;}
-.upload-box .upload-text{color:var(--accent);font-size:14px;}
-.upload-done{color:var(--green);font-size:13px;margin-top:6px;}
+.upload-box .upload-icon{font-size:24px;margin-bottom:8px;color:var(--text2);}
+.upload-box .upload-text{color:var(--text2);font-size:13px;letter-spacing:1px;}
+.upload-done{color:var(--accent);font-size:13px;margin-top:6px;}
 
 /* ── Checklist ── */
-.check-item{display:flex;align-items:center;gap:12px;padding:12px 0;font-size:15px;cursor:pointer;}
-.check-box{width:26px;height:26px;border-radius:6px;border:2px solid var(--border);
+.check-item{display:flex;align-items:center;gap:12px;padding:12px 0;font-size:14px;cursor:pointer;}
+.check-box{width:22px;height:22px;border-radius:4px;border:1px solid var(--border);
   background:transparent;flex-shrink:0;display:flex;align-items:center;justify-content:center;
   transition:background .15s,border-color .15s;}
 .check-box.checked{background:var(--accent);border-color:var(--accent);}
-.check-box.checked::after{content:'✓';color:#000;font-size:15px;font-weight:700;}
+.check-box.checked::after{content:'✓';color:#000;font-size:14px;font-weight:700;}
 
 /* ── Badges ── */
-.badge{display:inline-block;padding:4px 12px;border-radius:99px;font-size:12px;font-weight:700;}
-.badge.pending{background:var(--amber);color:#fff;}
-.badge.approved{background:var(--green);color:#fff;}
+.badge{display:inline-block;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:700;letter-spacing:1px;}
+.badge.pending{background:var(--bg4);color:var(--accent);border:1px solid var(--border);}
+.badge.approved{background:var(--accent);color:#000;}
 .badge.rejected{background:var(--red);color:#fff;}
 
 /* ── History rows ── */
-.history-row{background:var(--bg3);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:8px;}
+.history-row{background:var(--bg3);border-radius:var(--radius-sm);padding:16px;margin-bottom:8px;border:1px solid var(--border);}
 .history-top{display:flex;justify-content:space-between;align-items:flex-start;}
-.history-name{font-size:16px;font-weight:600;}
-.history-amount{font-size:18px;font-weight:700;color:var(--accent);}
-.history-sub{font-size:13px;color:var(--text2);margin:3px 0;}
-.history-date{font-size:12px;color:var(--text3);margin-top:6px;}
+.history-name{font-size:15px;font-weight:600;}
+.history-amount{font-size:18px;font-weight:300;color:var(--accent);font-family:Arial, sans-serif;}
+.history-sub{font-size:12px;color:var(--text2);margin:4px 0;}
+.history-date{font-size:11px;color:var(--text3);margin-top:8px;}
 
 /* ── Summary ── */
 .summary-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
-.summary-card{background:var(--bg3);border-radius:var(--radius-sm);padding:14px;}
-.summary-card .s-label{font-size:12px;color:var(--text2);margin-bottom:4px;}
-.summary-card .s-val{font-size:22px;font-weight:800;}
-.summary-card .s-val.amber{color:var(--amber);}
+.summary-card{background:var(--bg3);border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border);}
+.summary-card .s-label{font-size:11px;color:var(--text2);margin-bottom:6px;letter-spacing:1px;}
+.summary-card .s-val{font-size:22px;font-weight:300;font-family:Arial, sans-serif;}
 
-/* ── Total card ── */
-.total-card{background:var(--bg3);border-radius:var(--radius);padding:18px;text-align:center;margin-bottom:14px;}
-.total-label{font-size:13px;color:var(--text2);margin-bottom:4px;}
-.total-val{font-size:40px;font-weight:800;}
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
-.section-title{font-size:16px;font-weight:700;}
+/* ── Section header ── */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.section-title{font-size:15px;font-weight:600;letter-spacing:1px;color:var(--text2);}
 
 /* ── Month history ── */
-.month-hist-card{background:var(--bg3);border-radius:var(--radius-sm);padding:14px 16px;
-  margin-bottom:10px;cursor:pointer;}
+.month-hist-card{background:var(--bg3);border-radius:var(--radius-sm);padding:16px;
+  margin-bottom:10px;cursor:pointer;border:1px solid var(--border);}
 .month-hist-header{display:flex;align-items:center;justify-content:space-between;}
-.month-hist-title{font-size:16px;font-weight:700;}
-.month-hist-pct{font-size:14px;color:var(--accent);font-weight:700;}
-.month-hist-bar-wrap{background:var(--bg4);border-radius:99px;height:6px;margin:8px 0 4px;}
-.month-hist-bar{background:var(--accent);height:6px;border-radius:99px;}
-.month-hist-sub{font-size:12px;color:var(--text3);}
-.month-hist-detail{margin-top:10px;border-top:1px solid var(--border);padding-top:10px;display:none;}
+.month-hist-title{font-size:15px;font-weight:600;}
+.month-hist-pct{font-size:13px;color:var(--accent);}
+.month-hist-bar-wrap{background:var(--bg4);border-radius:99px;height:4px;margin:10px 0 6px;}
+.month-hist-bar{background:var(--accent);height:4px;border-radius:99px;}
+.month-hist-sub{font-size:11px;color:var(--text3);letter-spacing:1px;}
+.month-hist-detail{margin-top:12px;border-top:1px solid var(--border);padding-top:12px;display:none;}
 .month-hist-detail.open{display:block;}
 .mhd-row{display:flex;justify-content:space-between;align-items:center;
-  padding:6px 0;font-size:14px;border-bottom:1px solid var(--border);}
+  padding:8px 0;font-size:13px;border-bottom:1px solid var(--border);}
 .mhd-row:last-child{border-bottom:none;}
-.mhd-paid{color:var(--accent);font-size:13px;font-weight:700;}
-.mhd-unpaid{color:var(--red);font-size:13px;font-weight:700;}
+.mhd-paid{color:var(--accent);font-size:12px;font-weight:600;}
+.mhd-unpaid{color:var(--text3);font-size:12px;}
 
 /* ── Modals ── */
 .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;
   display:none;align-items:flex-end;justify-content:center;}
 .modal-overlay.open{display:flex;}
-.modal-sheet{background:var(--bg2);border-radius:20px 20px 0 0;padding:20px 20px 48px;
-  width:100%;max-width:430px;max-height:92vh;overflow-y:auto;}
-.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 18px;}
-.modal-close{float:right;background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;margin-top:-4px;}
+.modal-sheet{background:var(--bg2);border-radius:20px 20px 0 0;padding:24px 20px 48px;
+  width:100%;max-width:430px;max-height:92vh;overflow-y:auto;border-top:1px solid var(--border);}
+.modal-handle{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 20px;}
+.modal-close{float:right;background:none;border:none;color:var(--text2);font-size:24px;cursor:pointer;margin-top:-6px;}
 
 /* ── Dashboard modal ── */
 .dash-modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:200;
   display:none;align-items:center;justify-content:center;padding:16px;}
 .dash-modal.open{display:flex;}
-.dash-card{background:var(--bg2);border-radius:var(--radius);padding:24px;width:100%;max-width:400px;max-height:90vh;overflow-y:auto;}
-.dash-title{font-size:20px;font-weight:800;margin-bottom:20px;color:var(--accent);}
-.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
-.dash-item{background:var(--bg3);border-radius:var(--radius-sm);padding:14px;}
+.dash-card{background:var(--bg2);border-radius:var(--radius);padding:24px;width:100%;max-width:400px;max-height:90vh;overflow-y:auto;border:1px solid var(--border);}
+.dash-title{font-size:18px;font-weight:700;margin-bottom:20px;letter-spacing:2px;color:var(--accent);}
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+.dash-item{background:var(--bg3);border-radius:var(--radius-sm);padding:16px;border:1px solid var(--border);}
 .dash-item.full{grid-column:1/-1;}
-.dash-item-label{font-size:12px;color:var(--text2);margin-bottom:4px;}
-.dash-item-val{font-size:24px;font-weight:800;}
-.dash-edit-row{display:flex;gap:8px;margin-top:8px;}
-.dash-edit-input{flex:1;background:var(--bg4);border:1px solid var(--border);border-radius:8px;
-  color:var(--text);font-size:15px;padding:8px 12px;outline:none;}
-.dash-edit-btn{background:var(--accent2);border:none;border-radius:8px;color:#fff;
-  font-size:13px;padding:8px 14px;cursor:pointer;white-space:nowrap;}
+.dash-item-label{font-size:11px;color:var(--text2);margin-bottom:6px;letter-spacing:1px;}
+.dash-item-val{font-size:24px;font-weight:300;font-family:Arial, sans-serif;}
+.dash-edit-row{display:flex;gap:8px;margin-top:10px;}
+.dash-edit-input{flex:1;background:var(--bg4);border:1px solid var(--border);border-radius:6px;
+  color:var(--text);font-size:14px;padding:8px 12px;outline:none;}
+.dash-edit-btn{background:var(--accent2);border:none;border-radius:6px;color:#000;
+  font-size:12px;font-weight:600;padding:8px 14px;cursor:pointer;white-space:nowrap;}
 
 /* ── Confirm dialog ── */
 .dialog-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:300;
   display:none;align-items:center;justify-content:center;}
 .dialog-overlay.open{display:flex;}
-.dialog-box{background:#1e1e1e;border:1px solid var(--border);border-radius:14px;padding:20px 24px;width:82%;max-width:320px;color:var(--text);}
-.dialog-msg{font-size:15px;margin-bottom:18px;line-height:1.7;white-space:pre-wrap;}
-.dialog-btns{display:flex;justify-content:flex-end;gap:20px;}
-.dialog-cancel{color:var(--text2);font-size:16px;background:none;border:none;cursor:pointer;font-weight:600;}
-.dialog-ok{color:var(--accent);font-size:16px;background:none;border:none;cursor:pointer;font-weight:700;}
+.dialog-box{background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:24px;width:82%;max-width:320px;}
+.dialog-msg{font-size:14px;margin-bottom:24px;line-height:1.7;white-space:pre-wrap;color:var(--text);}
+.dialog-btns{display:flex;justify-content:flex-end;gap:16px;}
+.dialog-cancel{color:var(--text2);font-size:14px;background:none;border:none;cursor:pointer;letter-spacing:1px;}
+.dialog-ok{color:var(--accent);font-size:14px;background:none;border:none;cursor:pointer;font-weight:700;letter-spacing:1px;}
 
 /* ── Toast ── */
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
-  background:var(--accent);color:#000;padding:12px 28px;border-radius:99px;
-  font-size:14px;font-weight:700;z-index:400;opacity:0;transition:opacity .3s;
-  pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center;}
+  background:var(--accent);color:#000;padding:12px 24px;border-radius:99px;
+  font-size:13px;font-weight:700;z-index:400;opacity:0;transition:opacity .3s;
+  pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center;box-shadow:0 4px 12px rgba(0,0,0,0.5);}
 .toast.show{opacity:1;}
 .toast.error{background:var(--red);color:#fff;}
 
 /* ── Event collection cards ── */
-.event-card{background:var(--bg3);border-radius:var(--radius-sm);padding:16px;margin-bottom:10px;}
-.event-card-title{font-size:16px;font-weight:700;margin-bottom:4px;}
-.event-card-meta{font-size:12px;color:var(--text2);margin-bottom:10px;}
-.event-card-bar-wrap{background:var(--bg4);border-radius:99px;height:8px;margin-bottom:6px;}
-.event-card-bar{background:var(--accent);height:8px;border-radius:99px;}
-.event-card-pct{font-size:12px;color:var(--accent);text-align:right;}
+.event-card{background:var(--bg3);border-radius:var(--radius-sm);padding:16px;margin-bottom:10px;border:1px solid var(--border);}
+.event-card-title{font-size:15px;font-weight:600;margin-bottom:6px;}
+.event-card-meta{font-size:12px;color:var(--text2);margin-bottom:12px;line-height:1.4;}
+.event-card-bar-wrap{background:var(--bg4);border-radius:99px;height:4px;margin-bottom:8px;}
+.event-card-bar{background:var(--accent);height:4px;border-radius:99px;}
+.event-card-pct{font-size:11px;color:var(--accent2);text-align:right;}
 
 /* ── Admin action row ── */
-.admin-action-row{display:flex;gap:6px;margin-top:8px;}
-.action-btn{flex:1;padding:8px 4px;border:none;border-radius:8px;font-size:12px;
-  font-weight:700;cursor:pointer;}
+.admin-action-row{display:flex;gap:8px;margin-top:12px;}
+.action-btn{flex:1;padding:10px 4px;border:none;border-radius:6px;font-size:12px;
+  font-weight:600;cursor:pointer;letter-spacing:1px;}
 .action-approve{background:var(--accent);color:#000;}
-.action-reject{background:var(--bg4);color:#fff;border:1px solid var(--border);}
+.action-reject{background:var(--bg4);color:var(--text);border:1px solid var(--border);}
 </style>
 </head>
 <body>
@@ -346,35 +340,32 @@ select.form-input{-webkit-appearance:none;appearance:none;}
 <div id="loading-overlay">
   <div style="margin-bottom:20px;text-align:center;">
     <svg width="80" height="80" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
-      <rect width="512" height="512" rx="100" fill="#1a1a1a"/>
-      <text x="256" y="310" font-family="Arial Black,sans-serif" font-size="260" font-weight="900" fill="#ffffff" text-anchor="middle">S</text>
-      <circle cx="345" cy="350" r="34" fill="#555555"/>
-      <rect x="374" y="210" width="20" height="144" rx="10" fill="#555555"/>
-      <rect x="345" y="210" width="50" height="24" rx="12" fill="#555555"/>
+      <rect width="512" height="512" rx="100" fill="#1f1f1f"/>
+      <text x="256" y="340" font-family="Arial,sans-serif" font-size="280" font-weight="300" fill="#ffffff" text-anchor="middle">S</text>
     </svg>
   </div>
-  <div style="font-size:22px;font-weight:800;color:var(--accent);margin-bottom:4px;">SoundCity 会計</div>
-  <div style="font-size:12px;color:var(--text3);margin-bottom:20px;">SoundCity</div>
+  <div style="font-size:20px;font-weight:700;color:var(--accent);margin-bottom:6px;letter-spacing:3px;">SoundCity会計</div>
+  <div style="font-size:11px;color:var(--text3);margin-bottom:24px;letter-spacing:2px;">LIGHT MUSIC CIRCLE</div>
   <div class="loading-spinner"></div>
-  <div class="loading-text">読み込み中...</div>
+  <div class="loading-text" style="margin-top:16px;">読み込み中...</div>
 </div>
 
 <!-- ═══ 管理者ログインモーダル ═══ -->
 <div id="auth-overlay" class="hidden">
   <div style="position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:998;" onclick="closeAdminLogin()"></div>
   <div class="auth-card" style="position:relative;z-index:999;">
-    <button onclick="closeAdminLogin()" style="position:absolute;top:12px;right:14px;background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;">✕</button>
-    <div class="auth-title" style="font-size:18px;">🔐 管理者ログイン</div>
+    <button onclick="closeAdminLogin()" style="position:absolute;top:16px;right:16px;background:none;border:none;color:var(--text2);font-size:24px;cursor:pointer;">✕</button>
+    <div class="auth-title" style="font-size:18px;">ADMIN LOGIN</div>
     <div class="auth-sub">会計担当者専用</div>
-    <div style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:8px 12px;margin-bottom:16px;font-size:12px;color:var(--text2);text-align:center;">
-      ⚠ 会計担当者限定の機能です
+    <div style="background:var(--bg4);border:1px solid var(--border);border-radius:6px;padding:10px;margin-bottom:20px;font-size:11px;color:var(--text2);text-align:center;letter-spacing:1px;">
+      会計担当者限定の機能です
     </div>
     <div id="auth-login-panel">
       <label class="form-label">メールアドレス</label>
       <input class="form-input" id="login-email" type="email" placeholder="your@email.com">
       <label class="form-label">パスワード</label>
       <input class="form-input" id="login-pass" type="password" placeholder="パスワード">
-      <button class="submit-btn" onclick="doLogin()">ログイン</button>
+      <button class="submit-btn" onclick="doLogin()" style="margin-top:8px;">ログイン</button>
     </div>
   </div>
 </div>
@@ -385,73 +376,79 @@ select.form-input{-webkit-appearance:none;appearance:none;}
   <!-- HOME -->
   <div id="screen-home" class="screen">
     <div class="home-hero">
-      <h1>SoundCity <span style="font-weight:300;">会計</span></h1>
+      <h1>SoundCity<span>会計</span></h1>
       <div class="underline"></div>
     </div>
     <div id="user-bar-home" class="user-bar">
       <div>
         <div class="user-bar-name" id="home-user-name">ゲスト</div>
-        <div style="margin-top:3px;"><span class="user-bar-role" id="home-user-role">👁 閲覧モード</span></div>
+        <div style="margin-top:6px;"><span class="user-bar-role" id="home-user-role">閲覧モード</span></div>
       </div>
+      <!-- ゲスト時: 管理者ログインボタン -->
       <button id="admin-login-btn" onclick="openAdminLogin()"
-        style="font-size:12px;padding:6px 12px;border-radius:8px;border:1px solid var(--accent2);
-               color:var(--accent);background:transparent;cursor:pointer;white-space:nowrap;">
-        🔐 管理者ログイン
+        style="font-size:11px;padding:8px 14px;border-radius:6px;border:1px solid var(--border);
+               color:var(--accent);background:var(--bg4);cursor:pointer;white-space:nowrap;font-weight:600;letter-spacing:1px;">
+        ログイン
       </button>
-      <button id="logout-btn" class="logout-btn" onclick="doLogout()" style="display:none;">ログアウト</button>
+      <!-- ログイン時: ログアウトボタン -->
+      <button id="logout-btn" class="logout-btn" onclick="doLogout()" style="display:none;border:1px solid var(--border);padding:6px 12px;border-radius:4px;">ログアウト</button>
     </div>
+    
     <!-- アプリ内通知バナー -->
     <div id="home-alert-banner" style="display:none;background:var(--bg3);border:1px solid var(--border);
-      border-radius:var(--radius-sm);padding:12px 16px;margin-bottom:12px;
-      display:none;align-items:center;gap:10px;">
-      <span style="font-size:20px;">🔔</span>
-      <div id="home-alert-text" style="font-size:13px;font-weight:700;color:var(--text);flex:1;"></div>
+      border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:16px;
+      align-items:center;gap:12px;">
+      <span style="font-size:18px;">ℹ️</span>
+      <div id="home-alert-text" style="font-size:12px;font-weight:600;color:var(--accent);flex:1;line-height:1.5;"></div>
       <button onclick="document.getElementById('home-alert-banner').style.display='none'"
-        style="background:none;border:none;color:var(--text3);font-size:18px;cursor:pointer;">✕</button>
+        style="background:none;border:none;color:var(--text3);font-size:16px;cursor:pointer;">✕</button>
     </div>
+
     <button class="menu-btn" id="menu-buhi" onclick="go('buhi')">
       <span class="icon">💰</span> 部費集金
-      <span id="badge-buhi" style="display:none;background:var(--accent);color:#000;font-size:11px;font-weight:700;padding:2px 7px;border-radius:99px;margin-left:auto;"></span>
+      <span id="badge-buhi" style="display:none;background:var(--bg4);color:var(--accent);border:1px solid var(--border);font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;margin-left:auto;"></span>
     </button>
     <button class="menu-btn" id="menu-event" onclick="go('event')">
-      <span class="icon">🎟</span> 特別徴収（イベント費）
-      <span id="badge-event" style="display:none;background:var(--accent);color:#000;font-size:11px;font-weight:700;padding:2px 7px;border-radius:99px;margin-left:auto;"></span>
+      <span class="icon">🎟</span> 特別徴収（イベント等）
+      <span id="badge-event" style="display:none;background:var(--bg4);color:var(--accent);border:1px solid var(--border);font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;margin-left:auto;"></span>
     </button>
     <button class="menu-btn" id="menu-repair" onclick="go('repair')">
-      <span class="icon">🎷</span> 楽器修理
-      <span id="badge-repair" style="display:none;background:var(--accent);color:#000;font-size:11px;font-weight:700;padding:2px 7px;border-radius:99px;margin-left:auto;"></span>
+      <span class="icon">🎸</span> 機材 / 楽器修理
+      <span id="badge-repair" style="display:none;background:var(--bg4);color:var(--accent);border:1px solid var(--border);font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;margin-left:auto;"></span>
     </button>
     <button class="menu-btn" id="menu-other" onclick="go('other')">
-      <span class="icon">📋</span> その他出費
-      <span id="badge-other" style="display:none;background:var(--accent);color:#000;font-size:11px;font-weight:700;padding:2px 7px;border-radius:99px;margin-left:auto;"></span>
+      <span class="icon">📝</span> その他出費
+      <span id="badge-other" style="display:none;background:var(--bg4);color:var(--accent);border:1px solid var(--border);font-size:10px;font-weight:700;padding:2px 8px;border-radius:99px;margin-left:auto;"></span>
     </button>
+    
     <!-- Admin only -->
     <div id="admin-only-btns" style="display:none;">
-      <button class="menu-btn" onclick="go('enjo')" style="background:var(--bg3);border:1px solid var(--border);">
+      <button class="menu-btn" onclick="go('enjo')" style="background:var(--bg2);border:1px dashed var(--border);">
         <span class="icon">🏛</span> 援助金管理
       </button>
-      <button class="dashboard-btn" onclick="openDashboard()" style="margin-bottom:12px;">📊 サークル財政ダッシュボード</button>
+      <button class="dashboard-btn" onclick="openDashboard()" style="margin-bottom:12px;">📊 財政ダッシュボード</button>
     </div>
+    
     <!-- 口座情報 -->
-    <div style="background:var(--bg3);border-radius:var(--radius);padding:18px;margin-top:4px;">
-      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
-        <span style="font-size:18px;">🏦</span>
-        <span style="font-size:14px;font-weight:700;color:var(--text2);">振込口座情報</span>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-top:12px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+        <span style="font-size:18px;color:var(--accent2);">🏦</span>
+        <span style="font-size:13px;font-weight:700;color:var(--text2);letter-spacing:1px;">振込口座情報</span>
       </div>
-      <div style="display:grid;gap:10px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;">
-          <span style="font-size:13px;color:var(--text3);">銀行</span><span style="font-size:15px;font-weight:600;">りそな銀行</span>
+      <div style="display:grid;gap:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:12px;">
+          <span style="font-size:12px;color:var(--text3);">銀行</span><span style="font-size:14px;font-weight:600;">りそな銀行</span>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;">
-          <span style="font-size:13px;color:var(--text3);">支店</span><span style="font-size:15px;font-weight:600;">本郷支店</span>
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:12px;">
+          <span style="font-size:12px;color:var(--text3);">支店</span><span style="font-size:14px;font-weight:600;">本郷支店</span>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;">
-          <span style="font-size:13px;color:var(--text3);">口座名義</span>
-          <span style="font-size:13px;font-weight:600;text-align:right;line-height:1.5;">SoundCity</span>
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:12px;">
+          <span style="font-size:12px;color:var(--text3);">口座名義</span>
+          <span style="font-size:13px;font-weight:600;text-align:right;line-height:1.5;">サウンドシティ</span>
         </div>
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <span style="font-size:13px;color:var(--text3);">普通</span>
-          <span style="font-size:22px;font-weight:800;color:#000;background:var(--accent);border-radius:8px;padding:4px 14px;letter-spacing:3px;">1886166</span>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding-top:4px;">
+          <span style="font-size:12px;color:var(--text3);">普通</span>
+          <span style="font-size:22px;font-weight:300;color:var(--accent);background:var(--bg4);border:1px solid var(--border);border-radius:6px;padding:6px 16px;letter-spacing:4px;font-family:Arial,sans-serif;">1886166</span>
         </div>
       </div>
     </div>
@@ -461,63 +458,54 @@ select.form-input{-webkit-appearance:none;appearance:none;}
   <!-- 部費集金 -->
   <div id="screen-buhi" class="screen">
     <div class="page-header">
-      <button class="back-btn" onclick="go('home')">← ホームに戻る</button>
+      <button class="back-btn" onclick="go('home')">← 戻る</button>
       <div class="page-title">部費集金</div>
     </div>
     <div class="tab-bar">
       <button class="tab-btn active" id="tab-btn-collect" onclick="switchBuhiTab('collect')">回収状況</button>
-      <button class="tab-btn" id="tab-btn-member" onclick="switchBuhiTab('member')">メンバー追加</button>
+      <button class="tab-btn" id="tab-btn-member" onclick="switchBuhiTab('member')">メンバー管理</button>
       <button class="tab-btn" id="tab-btn-history" onclick="switchBuhiTab('history')">月別履歴</button>
     </div>
     <!-- 回収状況 -->
     <div class="tab-panel active" id="tab-collect">
-      <div id="deadline-card" style="border-radius:var(--radius);padding:14px 18px;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--bg3);">
-        <div style="display:flex;align-items:center;gap:10px;flex:1;">
-          <span style="font-size:22px;">📅</span>
+      <div id="deadline-card" style="border-radius:var(--radius);border:1px solid var(--border);padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--bg3);">
+        <div style="display:flex;align-items:center;gap:12px;flex:1;">
+          <span style="font-size:20px;color:var(--accent2);">📅</span>
           <div>
-            <div style="font-size:12px;color:var(--text3);margin-bottom:2px;">集金期日</div>
-            <div id="deadline-display" style="font-size:17px;font-weight:700;color:var(--text2);">未設定</div>
-            <div id="deadline-remaining" style="font-size:12px;margin-top:2px;color:var(--text3);">期日を設定してください</div>
+            <div style="font-size:11px;color:var(--text3);margin-bottom:4px;letter-spacing:1px;">集金期日</div>
+            <div id="deadline-display" style="font-size:16px;font-weight:600;color:var(--text2);">未設定</div>
+            <div id="deadline-remaining" style="font-size:11px;margin-top:4px;color:var(--text3);">期日を設定してください</div>
           </div>
         </div>
-        <button id="deadline-change-btn" onclick="openDeadlineEdit()" style="background:none;border:1px solid var(--border);border-radius:8px;color:var(--text2);font-size:12px;padding:6px 12px;cursor:pointer;white-space:nowrap;display:none;">変更</button>
+        <button id="deadline-change-btn" onclick="openDeadlineEdit()" style="background:var(--bg4);border:1px solid var(--border);border-radius:6px;color:var(--accent);font-size:11px;padding:8px 14px;cursor:pointer;white-space:nowrap;display:none;letter-spacing:1px;font-weight:600;">設定</button>
       </div>
       <div class="card">
         <div class="progress-big">
           <div class="progress-num" id="buhi-num">0 <span>/ 0</span></div>
-          <div class="progress-sub">人が支払い済み</div>
+          <div class="progress-sub">支払済み</div>
           <div class="progress-bar-wrap"><div class="progress-bar" id="buhi-bar" style="width:0%"></div></div>
           <div class="progress-pct" id="buhi-pct">0%</div>
         </div>
       </div>
       <div id="buhi-list"></div>
       <div id="buhi-admin-actions" style="display:none;">
-        <button class="save-month-btn" onclick="saveMonthSnapshot()">今月の状況を保存する</button>
+        <button class="save-month-btn" onclick="saveMonthSnapshot()">今月の状況を記録・リセット</button>
       </div>
     </div>
     <!-- メンバー追加（admin only） -->
     <div class="tab-panel" id="tab-member">
       <div id="member-add-form" class="card" style="display:none;">
-        <div style="font-size:16px;font-weight:700;margin-bottom:16px;">メンバーを追加</div>
+        <div style="font-size:15px;font-weight:600;margin-bottom:16px;letter-spacing:1px;">＋ メンバーを追加</div>
         <label class="form-label">名前</label>
         <input class="form-input" id="buhi-add-name" placeholder="例: 山田 太郎">
-        <label class="form-label">パート</label>
-        <select class="form-input" id="buhi-add-part" onchange="onPartChange('buhi-add-part','buhi-part-other-wrap')">
-          <option value="サックス">サックス</option>
-          <option value="トロンボーン">トロンボーン</option>
-          <option value="トランペット">トランペット</option>
-          <option value="リズム">リズム</option>
-          <option value="その他">その他</option>
-        </select>
-        <div id="buhi-part-other-wrap" style="display:none;">
-          <input class="form-input" id="buhi-add-part-other" placeholder="パートを入力">
-        </div>
+        <label class="form-label">パート（手動入力）</label>
+        <input class="form-input" id="buhi-add-part" placeholder="例: ボーカル、ギター、ベース、ドラム...">
         <button class="submit-btn" onclick="addBuhiMember()">追加する</button>
       </div>
       <div id="member-readonly-notice" class="card" style="display:none;">
-        <div style="font-size:14px;color:var(--text2);">📋 メンバーの追加は管理者のみ可能です。</div>
+        <div style="font-size:13px;color:var(--text2);text-align:center;letter-spacing:1px;">メンバーの追加は管理者のみ可能です。</div>
       </div>
-      <div style="font-size:14px;font-weight:700;color:var(--text2);margin-bottom:10px;">
+      <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:12px;letter-spacing:1px;">
         現在のメンバー（<span id="member-count">0</span>人）
       </div>
       <div id="buhi-member-list"></div>
@@ -530,21 +518,21 @@ select.form-input{-webkit-appearance:none;appearance:none;}
         <button class="month-nav" onclick="histMove(1)">→</button>
       </div>
       <div id="buhi-history-list"></div>
-      <div id="buhi-no-history" style="display:none;text-align:center;color:var(--text3);padding:40px 0;font-size:14px;">この月のデータはまだありません</div>
+      <div id="buhi-no-history" style="display:none;text-align:center;color:var(--text3);padding:40px 0;font-size:13px;letter-spacing:1px;">この月のデータはまだありません</div>
     </div>
   </div>
 
   <!-- 特別徴収（イベント費） -->
   <div id="screen-event" class="screen">
     <div class="page-header">
-      <button class="back-btn" onclick="go('home')">← ホームに戻る</button>
-      <div class="page-title">特別徴収（イベント費）</div>
+      <button class="back-btn" onclick="go('home')">← 戻る</button>
+      <div class="page-title">特別徴収</div>
     </div>
     <div id="event-admin-create" style="display:none;">
       <div class="card">
-        <div style="font-size:15px;font-weight:700;margin-bottom:14px;">＋ 新しい集金項目を作成</div>
-        <label class="form-label">タイトル（例：夏合宿費）</label>
-        <input class="form-input" id="ev-title" placeholder="例: 夏合宿費">
+        <div style="font-size:14px;font-weight:600;margin-bottom:16px;letter-spacing:1px;">＋ 新しい集金項目を作成</div>
+        <label class="form-label">タイトル</label>
+        <input class="form-input" id="ev-title" placeholder="例: 夏合宿費、スタジオ代集金">
         <label class="form-label">金額（円）</label>
         <input class="form-input" id="ev-amount" type="number" placeholder="例: 15000">
         <label class="form-label">期限</label>
@@ -563,12 +551,12 @@ select.form-input{-webkit-appearance:none;appearance:none;}
   <!-- イベント詳細 -->
   <div id="screen-event-detail" class="screen">
     <div class="page-header">
-      <button class="back-btn" onclick="go('event')">← 一覧に戻る</button>
+      <button class="back-btn" onclick="go('event')">← 戻る</button>
       <div class="page-title" id="event-detail-title">詳細</div>
     </div>
-    <div class="card" id="event-detail-info"></div>
+    <div class="card" id="event-detail-info" style="padding:20px;"></div>
     <div id="event-detail-list"></div>
-    <div id="event-admin-archive" style="display:none;margin-top:8px;">
+    <div id="event-admin-archive" style="display:none;margin-top:16px;">
       <button class="blue-btn" onclick="archiveCurrentEvent()">📦 この項目をアーカイブ</button>
     </div>
   </div>
@@ -576,39 +564,39 @@ select.form-input{-webkit-appearance:none;appearance:none;}
   <!-- 楽器修理 -->
   <div id="screen-repair" class="screen">
     <div class="page-header">
-      <button class="back-btn" onclick="go('home')">← ホームに戻る</button>
-      <div class="page-title">楽器修理</div>
+      <button class="back-btn" onclick="go('home')">← 戻る</button>
+      <div class="page-title">機材 / 楽器修理</div>
     </div>
-    <button class="green-btn" onclick="go('repair-kanpe')">📋 領収書カンペ</button>
-    <button class="blue-btn" onclick="go('repair-upload')">1. 領収書アップロード</button>
-    <button class="blue-btn" id="repair-history-btn" onclick="go('repair-history')">2. 部費利用状況</button>
+    <button class="green-btn" onclick="go('repair-kanpe')">📋 領収書カンペを表示</button>
+    <button class="blue-btn" onclick="go('repair-upload')">領収書アップロードと申請</button>
+    <button class="blue-btn" id="repair-history-btn" onclick="go('repair-history')">部費利用状況</button>
     <div id="repair-admin-btn" style="display:none;">
-      <button class="purple-btn" onclick="go('repair-admin')">👤 修理申請履歴（管理者）</button>
+      <button class="purple-btn" onclick="go('repair-admin')" style="margin-top:12px;">👤 修理申請履歴（管理者）</button>
     </div>
   </div>
 
   <!-- 領収書カンペ -->
   <div id="screen-repair-kanpe" class="screen">
     <div class="page-header">
-      <button class="back-btn" onclick="go('repair')">← メニューに戻る</button>
+      <button class="back-btn" onclick="go('repair')">← 戻る</button>
     </div>
-    <div style="background:var(--bg3);border:2px solid var(--border);border-radius:20px;padding:40px 24px;text-align:center;margin-top:20px;">
-      <div style="font-size:14px;color:var(--text2);margin-bottom:12px;">領収書の宛名</div>
-      <div style="font-size:40px;font-weight:900;color:var(--text);line-height:1.2;">東洋大学<br>SoundCity</div>
+    <div style="background:var(--accent);border-radius:16px;padding:40px 24px;text-align:center;margin-top:20px;">
+      <div style="font-size:12px;color:#666;margin-bottom:16px;font-weight:700;letter-spacing:1px;">領収書の宛名</div>
+      <div style="font-size:32px;font-weight:800;color:#000;line-height:1.4;letter-spacing:2px;">SoundCity</div>
     </div>
-    <button class="blue-btn" style="margin-top:20px;" onclick="go('repair')">閉じる</button>
+    <button class="blue-btn" style="margin-top:32px;" onclick="go('repair')">閉じる</button>
   </div>
 
   <!-- 領収書アップロード -->
   <div id="screen-repair-upload" class="screen">
     <div class="page-header">
-      <button class="back-btn" onclick="go('repair')">← メニューに戻る</button>
+      <button class="back-btn" onclick="go('repair')">← 戻る</button>
       <div class="page-title">領収書アップロード</div>
     </div>
-    <button class="green-btn" id="checklist-toggle-btn" onclick="toggleChecklist()" style="background:var(--bg3);color:var(--accent);border:1px solid var(--border);">✓ 領収書チェックシート ▼</button>
+    <button class="blue-btn" id="checklist-toggle-btn" onclick="toggleChecklist()" style="font-size:13px;padding:12px;">✓ 領収書チェックシート ▼</button>
     <div id="checklist-panel" style="display:none;">
       <div class="card">
-        <div style="font-size:15px;font-weight:700;margin-bottom:12px;color:var(--text2);">確認チェックリスト</div>
+        <div style="font-size:13px;font-weight:600;margin-bottom:12px;color:var(--text2);letter-spacing:1px;">確認チェックリスト</div>
         <div class="check-item" onclick="toggleCheck('chk1')">
           <div class="check-box" id="chk1"></div><span>現金で支払いましたか？</span>
         </div>
@@ -616,26 +604,24 @@ select.form-input{-webkit-appearance:none;appearance:none;}
           <div class="check-box" id="chk2"></div><span>宛名は一文字も間違っていませんか？</span>
         </div>
         <div id="checklist-done" style="display:none;">
-          <button class="green-btn" style="margin-top:10px;margin-bottom:0;pointer-events:none;">✓ チェック完了！</button>
+          <button class="green-btn" style="margin-top:16px;margin-bottom:0;pointer-events:none;background:var(--bg4);color:var(--accent);border:1px solid var(--border);">✓ チェック完了！</button>
         </div>
       </div>
     </div>
     <div class="upload-box" id="repair-upload-box">
       <input type="file" accept="image/*,.pdf" onchange="onRepairUpload(this)">
       <div class="upload-icon">📄</div>
-      <div class="upload-text">領収書の画像をアップロード</div>
+      <div class="upload-text">タップして領収書をアップロード</div>
       <div class="upload-done" id="repair-upload-done"></div>
     </div>
-    <div class="card" style="margin-top:4px;">
-      <div style="font-size:16px;font-weight:700;margin-bottom:14px;">修理情報</div>
+    <div class="card" style="margin-top:8px;">
+      <div style="font-size:15px;font-weight:600;margin-bottom:16px;letter-spacing:1px;">修理情報</div>
       <label class="form-label">名前</label>
       <input class="form-input" id="repair-name" placeholder="例: 山田太郎">
-      <label class="form-label">パート</label>
-      <select class="form-input" id="repair-part">
-        <option>サックス</option><option>トロンボーン</option><option>トランペット</option><option>リズム</option><option>その他</option>
-      </select>
+      <label class="form-label">パート（手動入力）</label>
+      <input class="form-input" id="repair-part" placeholder="例: ギター、ベース...">
       <label class="form-label">金額（円）</label>
-      <input class="form-input" id="repair-amount" type="number" placeholder="例: 35000">
+      <input class="form-input" id="repair-amount" type="number" placeholder="例: 15000">
       <button class="submit-btn" onclick="submitRepair()">修理代を申請する</button>
     </div>
   </div>
@@ -643,12 +629,12 @@ select.form-input{-webkit-appearance:none;appearance:none;}
   <!-- 修理申請履歴（管理者） -->
   <div id="screen-repair-admin" class="screen">
     <div class="page-header">
-      <button class="back-btn" onclick="go('repair')">← メニューに戻る</button>
-      <div class="page-title">修理申請履歴（管理者）</div>
+      <button class="back-btn" onclick="go('repair')">← 戻る</button>
+      <div class="page-title">申請履歴（管理者）</div>
     </div>
     <div class="summary-grid">
       <div class="summary-card"><div class="s-label">合計申請額</div><div class="s-val" id="repair-total-val">¥0</div></div>
-      <div class="summary-card"><div class="s-label">保留中</div><div class="s-val amber" id="repair-pending-val">0件</div></div>
+      <div class="summary-card"><div class="s-label">保留中</div><div class="s-val" style="color:var(--text);" id="repair-pending-val">0件</div></div>
     </div>
     <div id="repair-history-list"></div>
   </div>
@@ -656,7 +642,7 @@ select.form-input{-webkit-appearance:none;appearance:none;}
   <!-- 部費利用状況 -->
   <div id="screen-repair-history" class="screen">
     <div class="page-header">
-      <button class="back-btn" onclick="go('repair')">← メニューに戻る</button>
+      <button class="back-btn" onclick="go('repair')">← 戻る</button>
       <div class="page-title">部費利用状況</div>
     </div>
     <div id="repair-usage-list"></div>
@@ -665,34 +651,34 @@ select.form-input{-webkit-appearance:none;appearance:none;}
   <!-- その他出費 -->
   <div id="screen-other" class="screen">
     <div class="page-header">
-      <button class="back-btn" onclick="go('home')">← ホームに戻る</button>
+      <button class="back-btn" onclick="go('home')">← 戻る</button>
       <div class="page-title">その他出費</div>
     </div>
     <div class="card">
-      <div style="font-size:17px;font-weight:700;margin-bottom:16px;">📝 出費を申請する</div>
+      <div style="font-size:15px;font-weight:600;margin-bottom:16px;letter-spacing:1px;">📝 出費を申請する</div>
       <label class="form-label">名前</label>
       <input class="form-input" id="other-name" placeholder="例: 山田太郎">
       <label class="form-label">内容</label>
-      <textarea class="form-input" id="other-content" placeholder="例: 譜面購入、スタジオレンタル など"></textarea>
+      <textarea class="form-input" id="other-content" placeholder="例: 譜面購入、スタジオレンタル代 など"></textarea>
       <label class="form-label">金額（円）</label>
       <input class="form-input" id="other-amount" type="number" placeholder="例: 5000">
       <button class="submit-btn" id="other-submit-btn" onclick="submitOther()" style="background:var(--bg4);color:var(--text2);">申請する</button>
     </div>
     <div id="other-success" style="display:none;">
-      <button class="green-btn" style="pointer-events:none;">✓ 申請が完了しました！</button>
+      <button class="green-btn" style="pointer-events:none;background:var(--bg3);color:var(--accent);border:1px solid var(--border);">✓ 申請が完了しました！</button>
     </div>
     <!-- 月別切り替え -->
-    <div style="display:flex;align-items:center;justify-content:space-between;margin:8px 0 4px;">
-      <button onclick="otherHistMove(-1)" style="background:none;border:none;color:var(--accent);font-size:22px;cursor:pointer;padding:4px 8px;">←</button>
-      <div style="font-size:15px;font-weight:700;" id="other-month-label"></div>
-      <button onclick="otherHistMove(1)" style="background:none;border:none;color:var(--accent);font-size:22px;cursor:pointer;padding:4px 8px;">→</button>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin:16px 0 12px;">
+      <button onclick="otherHistMove(-1)" style="background:none;border:none;color:var(--accent);font-size:22px;cursor:pointer;padding:4px 12px;">←</button>
+      <div style="font-size:14px;font-weight:700;letter-spacing:2px;" id="other-month-label"></div>
+      <button onclick="otherHistMove(1)" style="background:none;border:none;color:var(--accent);font-size:22px;cursor:pointer;padding:4px 12px;">→</button>
     </div>
-    <div style="background:var(--bg3);border-radius:var(--radius);overflow:hidden;">
-      <div style="padding:14px 16px 8px;font-size:14px;font-weight:700;color:var(--text2);">申請履歴</div>
+    <div style="background:var(--bg3);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;">
+      <div style="padding:16px 16px 12px;font-size:12px;font-weight:700;color:var(--text2);letter-spacing:1px;">申請履歴</div>
       <div id="other-history-list" style="max-height:420px;overflow-y:auto;padding:0 16px 8px;"></div>
-      <div style="border-top:1px solid var(--border);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;">
-        <span style="font-size:13px;color:var(--text2);">合計金額</span>
-        <span style="font-size:22px;font-weight:800;" id="other-total">¥0</span>
+      <div style="border-top:1px solid var(--border);padding:16px;display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:12px;color:var(--text2);letter-spacing:1px;">合計金額</span>
+        <span style="font-size:22px;font-weight:300;font-family:Arial,sans-serif;" id="other-total">¥0</span>
       </div>
     </div>
   </div>
@@ -701,50 +687,50 @@ select.form-input{-webkit-appearance:none;appearance:none;}
   <!-- 援助金管理（管理者限定） -->
   <div id="screen-enjo" class="screen">
     <div class="page-header">
-      <button class="back-btn" onclick="go('home')">← ホームに戻る</button>
+      <button class="back-btn" onclick="go('home')">← 戻る</button>
       <div class="page-title">🏛 援助金管理</div>
     </div>
 
     <!-- 残金ハイライト -->
-    <div id="enjo-remaining-card" style="border-radius:var(--radius);padding:18px;margin-bottom:14px;
-      background:var(--bg3);border:2px solid var(--border);">
-      <div style="font-size:12px;color:var(--text2);margin-bottom:4px;font-weight:700;letter-spacing:1px;">必ず使い切るための残金</div>
-      <div id="enjo-remaining-val" style="font-size:44px;font-weight:900;color:var(--accent);">¥---</div>
-      <div style="display:flex;justify-content:space-between;margin-top:10px;font-size:12px;color:var(--text3);">
-        <span>上限額: <span id="enjo-limit-disp">未設定</span></span>
-        <span>申請済: <span id="enjo-used-disp">¥0</span></span>
+    <div id="enjo-remaining-card" style="border-radius:var(--radius);padding:24px 20px;margin-bottom:16px;
+      background:var(--bg2);border:1px solid var(--border);">
+      <div style="font-size:11px;color:var(--text2);margin-bottom:8px;font-weight:600;letter-spacing:1px;">必ず使い切るための残金</div>
+      <div id="enjo-remaining-val" style="font-size:42px;font-weight:300;color:var(--accent);font-family:Arial,sans-serif;">¥---</div>
+      <div style="display:flex;justify-content:space-between;margin-top:16px;font-size:11px;color:var(--text3);border-top:1px solid var(--border);padding-top:12px;">
+        <span>上限額: <span id="enjo-limit-disp" style="color:var(--text2);">未設定</span></span>
+        <span>申請済: <span id="enjo-used-disp" style="color:var(--text2);">¥0</span></span>
       </div>
     </div>
 
     <!-- 上限額設定 -->
     <div class="card">
-      <div style="font-size:14px;font-weight:700;margin-bottom:10px;">💴 上限額の設定（5月以降に入力）</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:12px;letter-spacing:1px;color:var(--text2);">💴 上限額の設定</div>
       <div style="display:flex;gap:8px;">
-        <input class="form-input" id="enjo-limit-input" type="number" placeholder="例: 500000" style="margin-bottom:0;flex:1;">
-        <button class="submit-btn" style="width:auto;padding:14px 16px;margin-top:0;" onclick="saveEnjoLimit()">設定</button>
+        <input class="form-input" id="enjo-limit-input" type="number" placeholder="例: 100000" style="margin-bottom:0;flex:1;">
+        <button class="submit-btn" style="width:auto;padding:14px 20px;margin-top:0;" onclick="saveEnjoLimit()">設定</button>
       </div>
     </div>
 
     <!-- 新規申請フォーム -->
     <div class="card">
-      <div style="font-size:15px;font-weight:700;margin-bottom:14px;">＋ 申請を追加</div>
+      <div style="font-size:14px;font-weight:600;margin-bottom:16px;letter-spacing:1px;">＋ 申請を追加</div>
       <label class="form-label">申請内容</label>
-      <input class="form-input" id="enjo-title" placeholder="例: スタンド購入、譜面印刷代">
+      <input class="form-input" id="enjo-title" placeholder="例: スタンド購入、印刷代">
       <label class="form-label">申請金額（円）</label>
-      <input class="form-input" id="enjo-amount" type="number" placeholder="例: 30000" oninput="calcEnjoRemaining()">
+      <input class="form-input" id="enjo-amount" type="number" placeholder="例: 15000" oninput="calcEnjoRemaining()">
       <label class="form-label">還付予定日</label>
       <input class="form-input" id="enjo-refund-date" type="date">
       <label class="form-label">還付金額（円）</label>
-      <input class="form-input" id="enjo-refund-amount" type="number" placeholder="例: 30000">
-      <div class="check-item" onclick="toggleEnjoCheck()" style="margin-bottom:10px;">
+      <input class="form-input" id="enjo-refund-amount" type="number" placeholder="例: 15000">
+      <div class="check-item" onclick="toggleEnjoCheck()" style="margin-bottom:16px;">
         <div class="check-box" id="enjo-cash-check"></div>
-        <span style="font-size:14px;">現金で支払い済み（領収書あり）</span>
+        <span style="font-size:13px;color:var(--text2);">現金で支払い済み（領収書あり）</span>
       </div>
       <button class="submit-btn" onclick="submitEnjo()">申請を追加する</button>
     </div>
 
     <!-- 申請一覧 -->
-    <div style="font-size:14px;font-weight:700;color:var(--text2);margin-bottom:10px;">申請一覧</div>
+    <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:12px;letter-spacing:1px;">申請一覧</div>
     <div id="enjo-list"></div>
   </div>
 
@@ -754,27 +740,27 @@ select.form-input{-webkit-appearance:none;appearance:none;}
 <div class="modal-overlay" id="deadline-modal">
   <div class="modal-sheet">
     <div class="modal-handle"></div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-      <div style="font-size:18px;font-weight:700;">集金期日を設定</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;">
+      <div style="font-size:16px;font-weight:600;letter-spacing:1px;">集金期日を設定</div>
       <button class="modal-close" onclick="closeDeadlineEdit()">✕</button>
     </div>
     <label class="form-label">期日</label>
     <input class="form-input" type="date" id="deadline-input">
-    <button class="submit-btn" onclick="saveDeadline()" style="margin-top:4px;">設定する</button>
+    <button class="submit-btn" onclick="saveDeadline()" style="margin-top:8px;">設定する</button>
   </div>
 </div>
 
 <!-- 財政ダッシュボード -->
 <div class="dash-modal" id="dashboard-modal">
   <div class="dash-card">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
       <div class="dash-title" style="margin-bottom:0;">📊 財政ダッシュボード</div>
-      <button onclick="closeDashboard()" style="background:none;border:none;color:var(--text2);font-size:22px;cursor:pointer;">✕</button>
+      <button onclick="closeDashboard()" style="background:none;border:none;color:var(--text2);font-size:24px;cursor:pointer;">✕</button>
     </div>
     <div class="dash-grid">
       <div class="dash-item full dash-admin-only">
         <div class="dash-item-label">💰 預金残高</div>
-        <div class="dash-item-val" style="color:var(--accent);" id="dash-balance">¥0</div>
+        <div class="dash-item-val" id="dash-balance">¥0</div>
         <div class="dash-edit-row">
           <input class="dash-edit-input" id="dash-balance-input" type="number" placeholder="金額を入力">
           <button class="dash-edit-btn" onclick="saveDashField('balance','dash-balance-input')">更新</button>
@@ -782,7 +768,7 @@ select.form-input{-webkit-appearance:none;appearance:none;}
       </div>
       <div class="dash-item dash-admin-only">
         <div class="dash-item-label">📈 今月収入予定</div>
-        <div class="dash-item-val" style="color:var(--text2);" id="dash-income">¥0</div>
+        <div class="dash-item-val" id="dash-income">¥0</div>
         <div class="dash-edit-row">
           <input class="dash-edit-input" id="dash-income-input" type="number" placeholder="上書き">
           <button class="dash-edit-btn" onclick="saveDashField('income_manual','dash-income-input')">更新</button>
@@ -790,7 +776,7 @@ select.form-input{-webkit-appearance:none;appearance:none;}
       </div>
       <div class="dash-item">
         <div class="dash-item-label">📉 今月支出</div>
-        <div class="dash-item-val" style="color:var(--text);" id="dash-expense">¥0</div>
+        <div class="dash-item-val" id="dash-expense">¥0</div>
         <div class="dash-edit-row dash-admin-only">
           <input class="dash-edit-input" id="dash-expense-input" type="number" placeholder="修正値">
           <button class="dash-edit-btn" onclick="saveDashField('expense_manual','dash-expense-input')">修正</button>
@@ -798,15 +784,15 @@ select.form-input{-webkit-appearance:none;appearance:none;}
       </div>
       <div class="dash-item full dash-admin-only">
         <div class="dash-item-label">📋 今月の申請件数</div>
-        <div style="display:flex;gap:16px;margin-top:6px;">
-          <div><div style="font-size:11px;color:var(--text3);">楽器修理</div><div style="font-size:20px;font-weight:700;" id="dash-repair-count">0件</div></div>
-          <div><div style="font-size:11px;color:var(--text3);">その他出費</div><div style="font-size:20px;font-weight:700;" id="dash-other-count">0件</div></div>
+        <div style="display:flex;gap:24px;margin-top:10px;">
+          <div><div style="font-size:10px;color:var(--text3);letter-spacing:1px;margin-bottom:4px;">機材修理</div><div style="font-size:20px;font-weight:300;font-family:Arial,sans-serif;" id="dash-repair-count">0件</div></div>
+          <div><div style="font-size:10px;color:var(--text3);letter-spacing:1px;margin-bottom:4px;">その他出費</div><div style="font-size:20px;font-weight:300;font-family:Arial,sans-serif;" id="dash-other-count">0件</div></div>
         </div>
       </div>
       <div class="dash-item full dash-admin-only">
         <div class="dash-item-label">メモ</div>
-        <textarea class="form-input" id="dash-note-input" style="margin-bottom:8px;height:70px;"></textarea>
-        <button class="dash-edit-btn" style="width:100%;" onclick="saveDashNote()">メモを保存</button>
+        <textarea class="form-input" id="dash-note-input" style="margin-bottom:12px;height:80px;"></textarea>
+        <button class="dash-edit-btn" style="width:100%;padding:12px;" onclick="saveDashNote()">メモを保存</button>
       </div>
     </div>
   </div>
@@ -826,16 +812,12 @@ select.form-input{-webkit-appearance:none;appearance:none;}
 
 <script>
 // ══════════════════════════════════════════════════════
-// SUPABASE CONFIG
+// CONFIG
 // ══════════════════════════════════════════════════════
 const SUPABASE_URL = 'https://bpdjqvqdctpbdfrexaka.supabase.co';
-const SUPABASE_KEY = 'sb_publishable_i-QYh_TwpzNqvZfuuFh-jA_Mek6kZ7-';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwZGpxdnFkY3RwYmRmcmV4YWthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1NTUxMDAsImV4cCI6MjA5MzEzMTEwMH0.TCskY4_eJEKybwcOMJutQbUK5LMY9IzrynyioQn6Sr4';
 const GAS_URL = 'https://script.google.com/macros/s/AKfycbzvlXp33hjTXYgTnfMFL9PpXLMpjXSkNAI6UK7KfXZpYM7WGaBXWgXMmm5Nbhl00iHlMA/exec';
-// ══════════════════════════════════════════════════════
-// LINE通知設定（GAS経由）
-// ══════════════════════════════════════════════════════
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbzvlXp33hjTXYgTnfMFL9PpXLMpjXSkNAI6UK7KfXZpYM7WGaBXWgXMmm5Nbhl00iHlMA/exec
-';
+const CHANNEL_ACCESS_TOKEN = 'iHStab/dteEQp8R0ZYfMWWQiymLRAxpGvhA/cUm9WEzodTctcyaAecajFsyyQYM5nLchCUqmla5tc8VYSLyNCzloowNS4RLrzAXRpQ7jocarLl8yP7vzyzrlXPyEXvOeUAX7pQfFvR24+zKHTEz5QQdB04t89/1O/w1cDnyilFU=';
 
 // ══════════════════════════════════════════════════════
 // HTTP HELPERS
@@ -923,7 +905,6 @@ function openAdminLogin() {
 function closeAdminLogin() {
   document.getElementById('auth-overlay').classList.add('hidden');
 }
-function showAuth() { openAdminLogin(); }
 
 // ══════════════════════════════════════════════════════
 // AUTH STATE
@@ -934,9 +915,6 @@ let accessToken = null;
 
 function isAdmin() { return currentProfile?.role === 'admin'; }
 
-// ══════════════════════════════════════════════════════
-// AUTH FUNCTIONS
-// ══════════════════════════════════════════════════════
 async function doLogin() {
   const email = document.getElementById('login-email').value.trim();
   const pass = document.getElementById('login-pass').value;
@@ -962,7 +940,6 @@ async function onLoginSuccess(data) {
   accessToken = data.access_token;
   currentUser = data.user;
   if (accessToken) localStorage.setItem('sb_token', accessToken);
-
   closeAdminLogin();
 
   try {
@@ -972,8 +949,8 @@ async function onLoginSuccess(data) {
     currentProfile = { role: 'admin', name: currentUser.email };
   }
 
-  // alligator.pear4046等、既存の管理者アドレスがあればそのまま機能するように残す
-  if (currentUser.email === 'alligator.pear4046@gmail.com') currentProfile.role = 'admin';
+  // アドレスのハードコードでの役割設定（必要に応じて変更）
+  if (currentUser.email === 'soundcity.admin@gmail.com') currentProfile.role = 'admin';
 
   showLoading('管理者モードに切り替え中...');
   await init();
@@ -989,11 +966,6 @@ async function doLogout() {
   currentUser = null; currentProfile = null; accessToken = null;
   showLoading('ゲストモードに戻ります...');
   await init();
-}
-
-function onPartChange(selectId, wrapId) {
-  const v = document.getElementById(selectId).value;
-  document.getElementById(wrapId).style.display = v === 'その他' ? 'block' : 'none';
 }
 
 // ══════════════════════════════════════════════════════
@@ -1074,10 +1046,10 @@ function renderHome() {
   document.getElementById('home-user-name').textContent = admin ? name + ' さん' : 'ゲスト';
   const roleEl = document.getElementById('home-user-role');
   if (admin) {
-    roleEl.textContent = '👑 管理者モード';
+    roleEl.textContent = 'ADMIN';
     roleEl.className = 'user-bar-role role-admin';
   } else {
-    roleEl.textContent = '👁 閲覧モード';
+    roleEl.textContent = '閲覧モード';
     roleEl.className = 'user-bar-role role-member';
   }
   document.getElementById('admin-only-btns').style.display = admin ? 'block' : 'none';
@@ -1088,10 +1060,9 @@ function renderHome() {
 
 function updateBadges() {
   const alerts = [];
-
   const pendingRepair = repairHistory.filter(r => r.status === 'pending').length;
   setBadge('badge-repair', pendingRepair);
-  if (pendingRepair) alerts.push(`楽器修理 ${pendingRepair}件が未承認`);
+  if (pendingRepair) alerts.push(`修理申請 ${pendingRepair}件が未承認`);
 
   const pendingOther = otherHistory.filter(h => h.status === 'pending').length;
   setBadge('badge-other', pendingOther);
@@ -1107,7 +1078,7 @@ function updateBadges() {
   const bannerText = document.getElementById('home-alert-text');
   if (alerts.length) {
     banner.style.display = 'flex';
-    bannerText.textContent = '⚠ ' + alerts.join('  /  ');
+    bannerText.textContent = alerts.join(' / ');
   } else {
     banner.style.display = 'none';
   }
@@ -1195,10 +1166,10 @@ function renderBuhi() {
   document.getElementById('buhi-admin-actions').style.display = isAdmin() ? 'block' : 'none';
   if (!isAdmin()) {
     document.getElementById('buhi-list').innerHTML = `
-      <div style="background:var(--bg3);border-radius:var(--radius-sm);padding:18px;text-align:center;color:var(--text2);font-size:14px;">
-        <div style="font-size:32px;font-weight:800;color:var(--accent);margin-bottom:6px;">${pct}%</div>
+      <div style="background:var(--bg3);border-radius:var(--radius-sm);padding:24px;text-align:center;color:var(--text2);font-size:14px;border:1px solid var(--border);">
+        <div style="font-size:32px;font-weight:300;color:var(--accent);margin-bottom:8px;font-family:Arial,sans-serif;">${pct}%</div>
         <div>${paid} / ${total} 人が支払い済み</div>
-        <div style="font-size:12px;margin-top:8px;color:var(--text3);">個人の情報は管理者のみ閲覧可能です</div>
+        <div style="font-size:11px;margin-top:12px;color:var(--text3);letter-spacing:1px;">個人の情報は管理者のみ閲覧可能です</div>
       </div>`;
   } else {
     document.getElementById('buhi-list').innerHTML = buhi.map((m,i) => `
@@ -1227,14 +1198,13 @@ async function toggleBuhi(i) {
 
 async function addBuhiMember() {
   const name = document.getElementById('buhi-add-name').value.trim();
-  const partSel = document.getElementById('buhi-add-part').value;
-  const partOther = document.getElementById('buhi-add-part-other').value.trim();
-  const part = partSel==='その他' ? (partOther||'その他') : partSel;
+  const part = document.getElementById('buhi-add-part').value.trim() || '未設定';
   if (!name) { showToast('名前を入力してください'); return; }
   try {
     const rows = await dbInsert('members',{name, part}, accessToken);
     if (rows&&rows[0]) buhi.push({id:rows[0].id,name:rows[0].name,part:rows[0].part,paid:false,payRowId:null});
     document.getElementById('buhi-add-name').value='';
+    document.getElementById('buhi-add-part').value='';
     renderBuhiMemberList(); renderBuhi();
     showToast(name+' を追加しました！');
   } catch(e) { showToast('追加失敗: '+e.message,true); }
@@ -1242,13 +1212,14 @@ async function addBuhiMember() {
 
 async function removeBuhiMember(i) {
   showConfirm(
-    buhi[i].name + ' を退部扱いにしますか？\n過去の集金ログは保持されます。これ以降の集金一覧からは非表示になります。',
+    buhi[i].name + ' を退部扱いにしますか？\n過去の集金ログは保持されますが、これ以降の集金一覧からは非表示になります。',
     async () => {
       try {
         await dbUpdate('members',{retired:true},`id=eq.${buhi[i].id}`, accessToken);
+        const name = buhi[i].name;
         buhi.splice(i,1);
         renderBuhiMemberList(); renderBuhi();
-        showToast(buhi[i]?.name||'メンバー' + ' を退部にしました');
+        showToast(name + ' を退部にしました');
       } catch(e) { showToast('失敗: '+e.message,true); }
     }
   );
@@ -1260,19 +1231,19 @@ function renderBuhiMemberList() {
   document.getElementById('member-count').textContent = buhi.length;
   const list = document.getElementById('buhi-member-list');
   if (!buhi.length) {
-    list.innerHTML='<div style="text-align:center;color:var(--text3);padding:24px 0;font-size:14px;">メンバーがいません</div>';
+    list.innerHTML='<div style="text-align:center;color:var(--text3);padding:24px 0;font-size:13px;letter-spacing:1px;">メンバーがいません</div>';
     return;
   }
   list.innerHTML = buhi.map((m,i) => `
     <div class="member-row">
       <div style="flex:1;"><div class="member-name">${m.name}</div><div class="member-part">${m.part}</div></div>
-      ${isAdmin()?`<button class="upload-mini" style="color:var(--amber);border-color:var(--amber);" onclick="removeBuhiMember(${i})">退部</button>`:''}
+      ${isAdmin()?`<button class="upload-mini" onclick="removeBuhiMember(${i})">退部</button>`:''}
     </div>`).join('');
 }
 
 async function saveMonthSnapshot() {
   const label = NOW_YEAR+'年'+(NOW_MONTH+1)+'月';
-  showConfirm(label+'の集金は終わりましたか？\n保存すると全員の支払い状況がリセットされ、月別履歴に記録されます。', async () => {
+  showConfirm(label+'の集金は完了しましたか？\n保存すると全員の支払い状況がリセットされ、月別履歴に記録されます。', async () => {
     try {
       const membersJson = buhi.map(m=>({name:m.name,part:m.part,paid:m.paid}));
       await dbUpsert('buhi_snapshots',{year:NOW_YEAR,month:NOW_MONTH,label,members_json:membersJson},'year,month', accessToken);
@@ -1280,7 +1251,7 @@ async function saveMonthSnapshot() {
       buhi.forEach(m=>m.paid=false);
       renderBuhi();
       await loadSnapshots();
-      showToast(label+'の集金状況を保存しました！');
+      showToast(label+'の集金状況を保存しました');
     } catch(e) { showToast('保存失敗: '+e.message,true); }
   });
 }
@@ -1314,7 +1285,7 @@ function renderBuhiHistory() {
         ${snap.members.map(m=>`
           <div class="mhd-row">
             <div><span style="font-weight:600;">${m.name}</span>
-            <span style="font-size:12px;color:var(--text3);margin-left:6px;">${m.part}</span></div>
+            <span style="font-size:11px;color:var(--text3);margin-left:8px;">${m.part}</span></div>
             <span class="${m.paid?'mhd-paid':'mhd-unpaid'}">${m.paid?'支払済':'未払い'}</span>
           </div>`).join('')}
       </div>
@@ -1334,7 +1305,7 @@ function renderDeadlineCard() {
   const display = document.getElementById('deadline-display');
   const remaining = document.getElementById('deadline-remaining');
   if (!deadlineDate) {
-    card.style.background='var(--bg3)'; display.textContent='未設定';
+    display.textContent='未設定';
     display.style.color='var(--text2)'; remaining.textContent='期日を設定してください';
     remaining.style.color='var(--text3)'; return;
   }
@@ -1342,10 +1313,10 @@ function renderDeadlineCard() {
   const dl=new Date(deadlineDate); dl.setHours(0,0,0,0);
   const diff=Math.round((dl-today)/86400000);
   display.textContent = dl.getFullYear()+'年'+(dl.getMonth()+1)+'月'+dl.getDate()+'日';
-  if (diff<0) { card.style.background='rgba(122,75,75,0.15)'; display.style.color='var(--red)'; remaining.textContent='期日を'+Math.abs(diff)+'日過ぎています'; remaining.style.color='var(--red)'; }
-  else if (diff===0) { card.style.background='rgba(122,108,75,0.18)'; display.style.color='var(--amber)'; remaining.textContent='今日が期日です！'; remaining.style.color='var(--amber)'; }
-  else if (diff<=3) { card.style.background='rgba(122,108,75,0.12)'; display.style.color='var(--amber)'; remaining.textContent='あと '+diff+' 日'; remaining.style.color='var(--amber)'; }
-  else { card.style.background='var(--bg3)'; display.style.color='var(--text)'; remaining.textContent='あと '+diff+' 日'; remaining.style.color='var(--accent)'; }
+  if (diff<0) { display.style.color='var(--text)'; remaining.textContent='期日を '+Math.abs(diff)+' 日過ぎています'; remaining.style.color='var(--text2)'; }
+  else if (diff===0) { display.style.color='var(--text)'; remaining.textContent='今日が期日です'; remaining.style.color='var(--text)'; }
+  else if (diff<=3) { display.style.color='var(--text)'; remaining.textContent='あと '+diff+' 日'; remaining.style.color='var(--text)'; }
+  else { display.style.color='var(--text)'; remaining.textContent='あと '+diff+' 日'; remaining.style.color='var(--text2)'; }
 }
 function openDeadlineEdit() {
   document.getElementById('deadline-modal').classList.add('open');
@@ -1373,7 +1344,7 @@ function renderEventList() {
   document.getElementById('event-admin-create').style.display = isAdmin() ? 'block' : 'none';
   const list = document.getElementById('event-list');
   if (!eventCollections.length) {
-    list.innerHTML='<div style="text-align:center;color:var(--text3);padding:32px 0;font-size:14px;">集金項目がまだありません</div>';
+    list.innerHTML='<div style="text-align:center;color:var(--text3);padding:32px 0;font-size:13px;letter-spacing:1px;">集金項目がまだありません</div>';
     return;
   }
   list.innerHTML = eventCollections.map(ev => {
@@ -1428,9 +1399,9 @@ async function openEventDetail(evId) {
   if (!ev) return;
   document.getElementById('event-detail-title').textContent = ev.title;
   document.getElementById('event-detail-info').innerHTML = `
-    <div style="font-size:16px;font-weight:700;margin-bottom:6px;">${ev.title}</div>
-    <div style="font-size:14px;color:var(--text2);">¥${ev.amount.toLocaleString('ja-JP')} ${ev.deadline?'／ 期限: '+ev.deadline:''}</div>
-    ${ev.description?`<div style="font-size:13px;color:var(--text3);margin-top:4px;">${ev.description}</div>`:''}`;
+    <div style="font-size:16px;font-weight:700;margin-bottom:8px;">${ev.title}</div>
+    <div style="font-size:13px;color:var(--text2);letter-spacing:1px;">¥${ev.amount.toLocaleString('ja-JP')} ${ev.deadline?'／ 期限: '+ev.deadline:''}</div>
+    ${ev.description?`<div style="font-size:12px;color:var(--text3);margin-top:8px;">${ev.description}</div>`:''}`;
   document.getElementById('event-admin-archive').style.display = isAdmin() ? 'block' : 'none';
   go('event-detail');
   await renderEventDetail(evId);
@@ -1481,7 +1452,7 @@ async function archiveCurrentEvent() {
 }
 
 // ══════════════════════════════════════════════════════
-// 楽器修理
+// 機材 / 楽器修理
 // ══════════════════════════════════════════════════════
 const chkState2={chk1:false,chk2:false};
 function toggleChecklist() {
@@ -1504,14 +1475,16 @@ function onRepairUpload(input) {
 }
 async function submitRepair() {
   const name=document.getElementById('repair-name').value.trim();
+  const part=document.getElementById('repair-part').value.trim() || '未設定';
   const amount=parseInt(document.getElementById('repair-amount').value)||0;
   if (!name||!amount) { showToast('名前と金額を入力してください'); return; }
   try {
-    const rows=await dbInsert('repair_requests',{name,part:document.getElementById('repair-part').value,amount,status:'pending',date:new Date().toISOString().slice(0,10)}, accessToken);
+    const rows=await dbInsert('repair_requests',{name,part,amount,status:'pending',date:new Date().toISOString().slice(0,10)}, accessToken);
     if (rows&&rows[0]) repairHistory.unshift(rows[0]);
     document.getElementById('repair-name').value='';
+    document.getElementById('repair-part').value='';
     document.getElementById('repair-amount').value='';
-    await sendLineNotify(`🎺【楽器修理申請】\n名前: ${name}\nパート: ${document.getElementById('repair-part').value}\n金額: ¥${amount.toLocaleString('ja-JP')}`);
+    await sendLineNotify(`🎸【機材修理申請】\n名前: ${name}\nパート: ${part}\n金額: ¥${amount.toLocaleString('ja-JP')}`);
     showToast('申請が完了しました！');
     go('repair-admin');
   } catch(e) { showToast('申請失敗: '+e.message,true); }
@@ -1529,7 +1502,7 @@ function renderRepairAdmin() {
         <div><div class="history-name">${r.name}</div><div class="history-sub">${r.part}</div></div>
         <div style="text-align:right;">
           <div class="history-amount">¥${r.amount.toLocaleString('ja-JP')}</div>
-          <div style="margin-top:4px;"><span class="badge ${r.status==='pending'?'pending':r.status==='approved'?'approved':'rejected'}">${r.status==='pending'?'保留中':r.status==='approved'?'承認済み':'却下'}</span></div>
+          <div style="margin-top:6px;"><span class="badge ${r.status==='pending'?'pending':r.status==='approved'?'approved':'rejected'}">${r.status==='pending'?'保留中':r.status==='approved'?'承認済み':'却下'}</span></div>
         </div>
       </div>
       <div class="history-date">申請日: ${r.date||''}</div>
@@ -1559,13 +1532,12 @@ function renderRepairUsage() {
         <div><div class="history-name">${r.name}</div><div class="history-sub">${r.part}</div></div>
         <div style="text-align:right;">
           <div class="history-amount">¥${r.amount.toLocaleString('ja-JP')}</div>
-          <div style="margin-top:4px;"><span class="badge ${r.status==='pending'?'pending':r.status==='approved'?'approved':'rejected'}">${r.status==='pending'?'保留中':r.status==='approved'?'承認済み':'却下'}</span></div>
+          <div style="margin-top:6px;"><span class="badge ${r.status==='pending'?'pending':r.status==='approved'?'approved':'rejected'}">${r.status==='pending'?'保留中':r.status==='approved'?'承認済み':'却下'}</span></div>
         </div>
       </div>
       <div class="history-date">申請日: ${r.date||''}</div>
     </div>`).join('');
 }
-
 
 // ══════════════════════════════════════════════════════
 // その他出費
@@ -1590,26 +1562,26 @@ function renderOtherHistory() {
 
   const list = document.getElementById('other-history-list');
   if (!filtered.length) {
-    list.innerHTML = '<div style="text-align:center;color:var(--text3);padding:24px 0;font-size:14px;">この月の申請はありません</div>';
+    list.innerHTML = '<div style="text-align:center;color:var(--text3);padding:24px 0;font-size:13px;letter-spacing:1px;">この月の申請はありません</div>';
     document.getElementById('other-total').textContent = '¥0';
     updateOtherBtn();
     return;
   }
   list.innerHTML = filtered.map(h => `
-    <div style="background:var(--bg4);border-radius:var(--radius-sm);padding:14px;margin-bottom:8px;flex-shrink:0;">
+    <div style="background:var(--bg2);border-radius:var(--radius-sm);padding:16px;margin-bottom:8px;border:1px solid var(--border);flex-shrink:0;">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">
         <div style="flex:1;min-width:0;">
-          <div style="font-size:15px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${h.name}</div>
-          <div style="font-size:13px;color:var(--text2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${h.content}</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:4px;">申請日: ${h.date||''}</div>
+          <div style="font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${h.name}</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${h.content}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:6px;">申請日: ${h.date||''}</div>
         </div>
         <div style="text-align:right;flex-shrink:0;">
-          <div style="font-size:18px;font-weight:700;color:var(--accent);">¥${h.amount.toLocaleString('ja-JP')}</div>
-          <div style="margin-top:4px;"><span class="badge ${h.status==='pending'?'pending':h.status==='approved'?'approved':'rejected'}">${h.status==='pending'?'保留中':h.status==='approved'?'承認済み':'却下'}</span></div>
+          <div style="font-size:18px;font-weight:300;color:var(--accent);font-family:Arial,sans-serif;">¥${h.amount.toLocaleString('ja-JP')}</div>
+          <div style="margin-top:6px;"><span class="badge ${h.status==='pending'?'pending':h.status==='approved'?'approved':'rejected'}">${h.status==='pending'?'保留中':h.status==='approved'?'承認済み':'却下'}</span></div>
         </div>
       </div>
       ${isAdmin()&&h.status==='pending'?`
-      <div class="admin-action-row" style="margin-top:8px;">
+      <div class="admin-action-row" style="margin-top:12px;">
         <button class="action-btn action-approve" onclick="reviewOther(${h.id},'approved')">✓ 承認</button>
         <button class="action-btn action-reject" onclick="reviewOther(${h.id},'rejected')">✗ 却下</button>
       </div>`:''}
@@ -1691,7 +1663,7 @@ async function saveDashField(field, inputId) {
   try {
     await dbUpdate('finance_dashboard',{[field]:val,updated_at:new Date().toISOString()},`id=eq.${dashboardData.id}`, accessToken);
     dashboardData[field]=val;
-    openDashboard();
+    openDashboard(); 
     showToast('更新しました');
   } catch(e) { showToast('更新失敗: '+e.message,true); }
 }
@@ -1704,7 +1676,6 @@ async function saveDashNote() {
     showToast('メモを保存しました');
   } catch(e) { showToast('保存失敗: '+e.message,true); }
 }
-
 
 // ══════════════════════════════════════════════════════
 // 援助金管理
@@ -1723,8 +1694,8 @@ function calcEnjoRemaining() {
   const used = enjoRequests.reduce((s, r) => s + (r.amount || 0), 0);
   const remain = enjoLimit - used;
   document.getElementById('enjo-remaining-val').textContent =
-    enjoLimit > 0 ? '¥' + remain.toLocaleString('ja-JP') : '¥---（上限未設定）';
-  document.getElementById('enjo-remaining-val').style.color = remain < 0 ? 'var(--red)' : 'var(--accent)';
+    enjoLimit > 0 ? '¥' + remain.toLocaleString('ja-JP') : '¥---';
+  document.getElementById('enjo-remaining-val').style.color = remain < 0 ? 'var(--text2)' : 'var(--accent)';
   document.getElementById('enjo-limit-disp').textContent =
     enjoLimit > 0 ? '¥' + enjoLimit.toLocaleString('ja-JP') : '未設定';
   document.getElementById('enjo-used-disp').textContent = '¥' + used.toLocaleString('ja-JP');
@@ -1785,20 +1756,20 @@ async function deleteEnjo(id) {
 function renderEnjoList() {
   const list = document.getElementById('enjo-list');
   if (!enjoRequests.length) {
-    list.innerHTML = '<div style="text-align:center;color:var(--text3);padding:24px 0;font-size:14px;">申請がまだありません</div>';
+    list.innerHTML = '<div style="text-align:center;color:var(--text3);padding:24px 0;font-size:13px;letter-spacing:1px;">申請がまだありません</div>';
     return;
   }
   list.innerHTML = enjoRequests.map(r => `
-    <div class="card" style="margin-bottom:10px;">
+    <div class="card" style="margin-bottom:12px;border:1px solid var(--border);">
       <div style="display:flex;justify-content:space-between;align-items:flex-start;">
         <div style="flex:1;">
-          <div style="font-size:15px;font-weight:700;">${r.title}</div>
-          <div style="font-size:13px;color:var(--text2);margin-top:3px;">申請額: ¥${(r.amount||0).toLocaleString('ja-JP')}</div>
-          ${r.refund_date ? `<div style="font-size:12px;color:var(--text);margin-top:2px;">📅 還付予定: ${r.refund_date} ¥${(r.refund_amount||0).toLocaleString('ja-JP')}</div>` : ''}
-          <div style="font-size:12px;margin-top:4px;">${r.has_receipt ? '<span style="color:var(--green);">✓ 領収書あり</span>' : '<span style="color:var(--amber);">⚠ 領収書未確認</span>'}</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:3px;">${r.date || ''}</div>
+          <div style="font-size:14px;font-weight:600;">${r.title}</div>
+          <div style="font-size:12px;color:var(--text2);margin-top:6px;">申請額: ¥${(r.amount||0).toLocaleString('ja-JP')}</div>
+          ${r.refund_date ? `<div style="font-size:11px;color:var(--accent2);margin-top:4px;">📅 還付予定: ${r.refund_date} ¥${(r.refund_amount||0).toLocaleString('ja-JP')}</div>` : ''}
+          <div style="font-size:11px;margin-top:6px;">${r.has_receipt ? '<span style="color:var(--text2);">✓ 領収書あり</span>' : '<span style="color:var(--text3);">⚠ 領収書未確認</span>'}</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:6px;">${r.date || ''}</div>
         </div>
-        <button class="upload-mini" style="color:var(--red);border-color:var(--red);flex-shrink:0;" onclick="deleteEnjo(${r.id})">削除</button>
+        <button class="upload-mini" style="color:var(--text);border-color:var(--border);flex-shrink:0;" onclick="deleteEnjo(${r.id})">削除</button>
       </div>
     </div>`).join('');
 }
@@ -1807,9 +1778,10 @@ function renderEnjoScreen() {
   calcEnjoRemaining();
   renderEnjoList();
   if (document.getElementById('enjo-limit-input')) {
-    document.getElementById('enjo-limit-input').placeholder = enjoLimit > 0 ? '現在: ¥' + enjoLimit.toLocaleString('ja-JP') : '例: 500000';
+    document.getElementById('enjo-limit-input').placeholder = enjoLimit > 0 ? '現在: ¥' + enjoLimit.toLocaleString('ja-JP') : '例: 100000';
   }
 }
+
 // ══════════════════════════════════════════════════════
 // UTILS
 // ══════════════════════════════════════════════════════
@@ -1818,7 +1790,11 @@ function showConfirm(msg,cb) {
   document.getElementById('confirm-msg').textContent=msg;
   confirmCallback=cb;
   document.getElementById('confirm-dialog').classList.add('open');
-  document.getElementById('confirm-ok-btn').onclick=()=>{ closeConfirm(); if(confirmCallback) confirmCallback(); };
+  document.getElementById('confirm-ok-btn').onclick=()=>{
+    const fn = confirmCallback;
+    closeConfirm();
+    if(fn) fn();
+  };
 }
 function closeConfirm() { document.getElementById('confirm-dialog').classList.remove('open'); confirmCallback=null; }
 
@@ -1837,13 +1813,11 @@ function showToast(msg, isError=false) {
 // ══════════════════════════════════════════════════════
 (async()=>{
   showLoading('起動中...');
-
   const token = localStorage.getItem('sb_token');
   if (token) {
     try {
-      const r = await fetch(`${https://bpdjqvqdctpbdfrexaka.supabase.co/rest/v1/}/auth/v1/user`, {
-        headers: { 'apikey': eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJwZGpxdnFkY3RwYmRmcmV4YWthIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1NTUxMDAsImV4cCI6MjA5MzEzMTEwMH0.TCskY4_eJEKybwcOMJutQbUK5LMY9IzrynyioQn6Sr4
-, 'Authorization': 'Bearer ' + token }
+      const r = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': 'Bearer ' + token }
       });
       if (r.ok) {
         const user = await r.json();
@@ -1856,7 +1830,7 @@ function showToast(msg, isError=false) {
           } catch(e) {
             currentProfile = { role: 'admin', name: user.email };
           }
-          if (user.email === 'alligator.pear4046@gmail.com') currentProfile.role = 'admin';
+          if (user.email === 'soundcity.admin@gmail.com') currentProfile.role = 'admin';
         }
       } else {
         localStorage.removeItem('sb_token');
