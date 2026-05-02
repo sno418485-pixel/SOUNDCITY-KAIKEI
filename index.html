@@ -13,8 +13,9 @@
     created_at timestamptz default now()
   );
 
-  -- ② カラム追加
+  -- ② カラム追加（※並び替え用の sort_order を追加しました）
   alter table members add column if not exists retired boolean default false;
+  alter table members add column if not exists sort_order int default 0;
 
   -- ③ 全テーブルのRLSを無効化（これが一番確実）
   alter table members disable row level security;
@@ -165,11 +166,32 @@ html,body{height:100%;background:var(--bg);color:var(--text);
 .progress-bar{background:var(--accent);height:8px;border-radius:99px;transition:width .4s;}
 .progress-pct{text-align:center;color:var(--accent);font-size:12px;letter-spacing:1px;}
 
-/* ── Member row ── */
+/* ── Member row & Move Controls ── */
 .member-row{display:flex;align-items:center;justify-content:space-between;
   background:var(--bg3);border-radius:var(--radius-sm);padding:14px 16px;margin-bottom:8px;border:1px solid var(--border);}
 .member-name{font-size:16px;font-weight:600;}
 .member-part{font-size:12px;color:var(--text2);margin-top:4px;}
+
+.move-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 14px;
+  padding-right: 14px;
+  border-right: 1px solid var(--border);
+}
+.move-btn {
+  background: none;
+  border: none;
+  color: var(--text2);
+  font-size: 14px;
+  cursor: pointer;
+  padding: 4px;
+  line-height: 1;
+  transition: color 0.2s;
+}
+.move-btn:hover:not(:disabled) { color: var(--accent); }
+.move-btn:disabled { opacity: 0.2; cursor: not-allowed; }
 
 /* ── Toggle ── */
 .toggle{width:50px;height:28px;border-radius:99px;background:var(--bg4);position:relative;
@@ -503,7 +525,7 @@ textarea.form-input{resize:none;height:100px;}
         <button class="submit-btn" onclick="addBuhiMember()">追加する</button>
       </div>
       <div id="member-readonly-notice" class="card" style="display:none;">
-        <div style="font-size:13px;color:var(--text2);text-align:center;letter-spacing:1px;">メンバーの追加は管理者のみ可能です。</div>
+        <div style="font-size:13px;color:var(--text2);text-align:center;letter-spacing:1px;">メンバーの管理は管理者のみ可能です。</div>
       </div>
       <div style="font-size:12px;font-weight:700;color:var(--text2);margin-bottom:12px;letter-spacing:1px;">
         現在のメンバー（<span id="member-count">0</span>人）
@@ -1118,7 +1140,8 @@ function setBadge(id, count, label) {
 // LOAD FUNCTIONS
 // ══════════════════════════════════════════════════════
 async function loadMembers() {
-  const members = await dbGet('members','retired=neq.true&order=id.asc', accessToken);
+  // 並び順（sort_order）を優先して取得
+  const members = await dbGet('members','retired=neq.true&order=sort_order.asc,id.asc', accessToken);
   const payments = await dbGet('buhi_payments',`year=eq.${NOW_YEAR}&month=eq.${NOW_MONTH}`, accessToken);
   const payMap = {};
   payments.forEach(p => { payMap[p.member_id] = { paid: p.paid, rowId: p.id }; });
@@ -1224,8 +1247,11 @@ async function addBuhiMember() {
   const name = document.getElementById('buhi-add-name').value.trim();
   const part = document.getElementById('buhi-add-part').value.trim() || '未設定';
   if (!name) { showToast('名前を入力してください'); return; }
+  
+  // 新規追加メンバーは一番下（現在の人数と同じ順番）にする
+  const sortOrder = buhi.length;
   try {
-    const rows = await dbInsert('members',{name, part}, accessToken);
+    const rows = await dbInsert('members',{name, part, sort_order: sortOrder}, accessToken);
     if (rows&&rows[0]) buhi.push({id:rows[0].id,name:rows[0].name,part:rows[0].part,paid:false,payRowId:null});
     document.getElementById('buhi-add-name').value='';
     document.getElementById('buhi-add-part').value='';
@@ -1249,6 +1275,29 @@ async function removeBuhiMember(i) {
   );
 }
 
+// 部員の並び替え処理
+async function moveMember(i, dir) {
+  if (!isAdmin()) return;
+  if (i + dir < 0 || i + dir >= buhi.length) return;
+  
+  // UI上の配列を入れ替え
+  const temp = buhi[i];
+  buhi[i] = buhi[i + dir];
+  buhi[i + dir] = temp;
+  
+  renderBuhiMemberList();
+  renderBuhi();
+  
+  try {
+    // データベース上の全員の sort_order を一括で更新
+    await Promise.all(buhi.map((m, index) => 
+      dbUpdate('members', { sort_order: index }, `id=eq.${m.id}`, accessToken)
+    ));
+  } catch(e) {
+    showToast('順序の保存に失敗しました: ' + e.message, true);
+  }
+}
+
 function renderBuhiMemberList() {
   document.getElementById('member-add-form').style.display = isAdmin() ? 'block' : 'none';
   document.getElementById('member-readonly-notice').style.display = isAdmin() ? 'none' : 'block';
@@ -1260,6 +1309,11 @@ function renderBuhiMemberList() {
   }
   list.innerHTML = buhi.map((m,i) => `
     <div class="member-row">
+      ${isAdmin() ? `
+      <div class="move-controls">
+        <button class="move-btn" onclick="moveMember(${i}, -1)" ${i === 0 ? 'disabled' : ''}>▲</button>
+        <button class="move-btn" onclick="moveMember(${i}, 1)" ${i === buhi.length - 1 ? 'disabled' : ''}>▼</button>
+      </div>` : ''}
       <div style="flex:1;"><div class="member-name">${m.name}</div><div class="member-part">${m.part}</div></div>
       ${isAdmin()?`<button class="upload-mini" onclick="removeBuhiMember(${i})">退部</button>`:''}
     </div>`).join('');
