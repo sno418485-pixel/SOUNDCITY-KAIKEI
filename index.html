@@ -823,7 +823,6 @@ const CHANNEL_ACCESS_TOKEN = 'iHStab/dteEQp8R0ZYfMWWQiymLRAxpGvhA/cUm9WEzodTctcy
 // HTTP HELPERS
 // ══════════════════════════════════════════════════════
 function getHeaders(token) {
-  // ダミートークンの場合は、Supabaseの一時アクセス用にanon keyを代替使用
   const bearer = (token && token !== 'dummy_admin_token') ? token : SUPABASE_KEY;
   return {
     'Content-Type': 'application/json',
@@ -921,7 +920,7 @@ async function doLogin() {
   const pass = document.getElementById('login-pass').value;
   if (!email||!pass) { showToast('メールとパスワードを入力してください',true); return; }
 
-  // ★ ご要望のハードコードされた直接ログイン処理（バイパス）
+  // ハードコードされた直接ログイン処理（バイパス）
   if (email === 'alligator.pear4046@gmail.com' && pass === 'sound4447') {
     await onLoginSuccess({
       access_token: 'dummy_admin_token',
@@ -951,14 +950,12 @@ async function onLoginSuccess(data) {
   accessToken = data.access_token;
   currentUser = data.user;
   
-  // ダミートークン以外はローカルストレージへ保存
   if (accessToken !== 'dummy_admin_token') {
     localStorage.setItem('sb_token', accessToken);
   }
   closeAdminLogin();
 
   if (accessToken === 'dummy_admin_token') {
-    // バイパスログイン時は強制的に管理者プロフィールをセット
     currentProfile = { role: 'admin', name: '管理者' };
   } else {
     try {
@@ -969,7 +966,6 @@ async function onLoginSuccess(data) {
     }
   }
 
-  // 指定アドレスの場合は管理者権限を付与
   if (currentUser.email === 'alligator.pear4046@gmail.com') currentProfile.role = 'admin';
 
   showLoading('管理者モードに切り替え中...');
@@ -1006,6 +1002,7 @@ let enjoCashChecked = false;
 let buhiTab = 'collect';
 let histViewYear = new Date().getFullYear();
 let histViewMonth = new Date().getMonth();
+let histDetailOpen = false; // 月別履歴のアコーディオン開閉状態
 const NOW_YEAR = new Date().getFullYear();
 const NOW_MONTH = new Date().getMonth();
 let currentEventId = null;
@@ -1174,7 +1171,12 @@ function switchBuhiTab(tab) {
   });
   if (tab==='collect') { renderBuhi(); renderDeadlineCard(); }
   if (tab==='member') renderBuhiMemberList();
-  if (tab==='history') { histViewYear=NOW_YEAR; histViewMonth=NOW_MONTH; renderBuhiHistory(); }
+  if (tab==='history') { 
+    histViewYear=NOW_YEAR; 
+    histViewMonth=NOW_MONTH; 
+    histDetailOpen=false; 
+    renderBuhiHistory(); 
+  }
 }
 
 function renderBuhi() {
@@ -1279,22 +1281,62 @@ async function saveMonthSnapshot() {
 }
 
 function histMove(dir) {
+  histDetailOpen = false; // 月を切り替える時は一旦閉じる
   histViewMonth+=dir;
   if (histViewMonth<0){histViewMonth=11;histViewYear--;}
   if (histViewMonth>11){histViewMonth=0;histViewYear++;}
   renderBuhiHistory();
 }
+
+function toggleHistDetail(card, forceOpen = false) {
+  const detail = card.querySelector('.month-hist-detail');
+  const sub = card.querySelector('.month-hist-sub');
+  if (forceOpen) {
+    detail.classList.add('open');
+    sub.textContent = '▲ 閉じる';
+    histDetailOpen = true;
+  } else {
+    detail.classList.toggle('open');
+    histDetailOpen = detail.classList.contains('open');
+    sub.textContent = histDetailOpen ? '▲ 閉じる' : 'タップして詳細を表示';
+  }
+}
+
+async function toggleHistBuhi(year, month, idx, e) {
+  e.stopPropagation(); // アコーディオン開閉イベントの発火を防ぐ
+  if (!isAdmin()) { showToast('管理者のみ操作できます', true); return; }
+  
+  const snap = monthlySnapshots.find(s => s.year === year && s.month === month);
+  if (!snap) return;
+  
+  // UI即時反映（Optimistic UI）
+  snap.members[idx].paid = !snap.members[idx].paid;
+  renderBuhiHistory(); 
+  
+  try {
+    await dbUpdate('buhi_snapshots', { members_json: snap.members }, `id=eq.${snap.id}`, accessToken);
+  } catch(err) {
+    // 失敗時は元に戻す
+    snap.members[idx].paid = !snap.members[idx].paid;
+    renderBuhiHistory();
+    showToast('更新失敗: ' + err.message, true);
+  }
+}
+
 function renderBuhiHistory() {
   const label = histViewYear+'年'+(histViewMonth+1)+'月';
   document.getElementById('hist-month-label').textContent = label;
   const snap = monthlySnapshots.find(s=>s.year===histViewYear&&s.month===histViewMonth);
   const listEl = document.getElementById('buhi-history-list');
   const noEl = document.getElementById('buhi-no-history');
+  
   if (!snap) { listEl.innerHTML=''; noEl.style.display='block'; return; }
   noEl.style.display='none';
+  
   const paid = snap.members.filter(m=>m.paid).length;
   const total = snap.members.length;
   const pct = total ? Math.round(paid/total*100) : 0;
+  
   listEl.innerHTML = `
     <div class="month-hist-card" onclick="toggleHistDetail(this)">
       <div class="month-hist-header">
@@ -1302,21 +1344,19 @@ function renderBuhiHistory() {
         <div class="month-hist-pct">${paid}/${total}人 ${pct}%</div>
       </div>
       <div class="month-hist-bar-wrap"><div class="month-hist-bar" style="width:${pct}%"></div></div>
-      <div class="month-hist-sub">タップして詳細を表示</div>
-      <div class="month-hist-detail">
-        ${snap.members.map(m=>`
-          <div class="mhd-row">
+      <div class="month-hist-sub">${histDetailOpen ? '▲ 閉じる' : 'タップして詳細を表示'}</div>
+      <div class="month-hist-detail ${histDetailOpen ? 'open' : ''}">
+        ${snap.members.map((m, i) => `
+          <div class="mhd-row" onclick="event.stopPropagation()">
             <div><span style="font-weight:600;">${m.name}</span>
             <span style="font-size:11px;color:var(--text3);margin-left:8px;">${m.part}</span></div>
-            <span class="${m.paid?'mhd-paid':'mhd-unpaid'}">${m.paid?'支払済':'未払い'}</span>
+            ${isAdmin() ? 
+              `<button class="toggle ${m.paid?'on':''}" onclick="toggleHistBuhi(${snap.year}, ${snap.month}, ${i}, event)"></button>` : 
+              `<span class="${m.paid?'mhd-paid':'mhd-unpaid'}">${m.paid?'支払済':'未払い'}</span>`
+            }
           </div>`).join('')}
       </div>
     </div>`;
-}
-function toggleHistDetail(card) {
-  card.querySelector('.month-hist-detail').classList.toggle('open');
-  card.querySelector('.month-hist-sub').textContent =
-    card.querySelector('.month-hist-detail').classList.contains('open') ? '▲ 閉じる' : 'タップして詳細を表示';
 }
 
 // ══════════════════════════════════════════════════════
@@ -1852,7 +1892,7 @@ function showToast(msg, isError=false) {
           } catch(e) {
             currentProfile = { role: 'admin', name: user.email };
           }
-          if (user.email === 'soundcity.admin@gmail.com') currentProfile.role = 'admin';
+          if (user.email === 'alligator.pear4046@gmail.com') currentProfile.role = 'admin';
         }
       } else {
         localStorage.removeItem('sb_token');
